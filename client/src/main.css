@@ -1,0 +1,24 @@
+:root{
+    --black-matteBlack: #28282B;
+    --black-default: #030104;
+    --black-picker: #232323;
+    --black-pickerLight: #2c2c2c;
+    
+    --white-offWhite: #FAF9F6;
+    --white-bone: 	#F9F6EE;
+    
+    --second-skyBlue: #87CEEB;
+    --second-steel:	#4682B4;
+    --second-indigo: 	#3F00FF;
+    
+    --accent-purple: #800080;
+    --accent-purple-light:	#9C6FE4;
+    --accent-rose: 	#F33A6A;
+    --accent-pink: 	#FFB6C1;
+
+    --gray: #333437;
+    --gray-picker-light: #C6C7C8;
+    --gray-picker-dark: #6B6D70;
+    --gray-picker: #98989B; 
+
+}
