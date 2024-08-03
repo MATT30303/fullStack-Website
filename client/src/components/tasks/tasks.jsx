@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import React from "react";
 import axios from "axios";
-import './App.css'
+
 
 export default function App (){
   const [listOfCards, setListOfCards] = useState([]);
@@ -11,15 +11,21 @@ export default function App (){
       setListOfCards(response.data);
     })
   },[])
-  return(
-    <div>BUENARDOPOLIS:
-
-      <div>
+  
+  /*
+  <div>
         {listOfCards.map((value,key)=>{
-          return <div>{value.user}</div>;
-        })}
-      </div>
+          return <div>{value.title}</div>;
 
+        })}
+  </div>
+ */
+
+
+  return(
+    <div>
+PESUUUTII
+      
     </div>
   );
 }

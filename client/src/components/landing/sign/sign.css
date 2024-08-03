@@ -121,6 +121,26 @@
         letter-spacing: normal;  
       }
 }
+.wrongEmail, .wrongPassword{
+    letter-spacing: .100rem;
+    padding: 2rem 0 1rem 0;
+    background-color: transparent;
+    border: none;
+    outline: none;
+    border-bottom: thin solid var(--accent-rose);
+    color: var(--white-offWhite);
+    &::placeholder {
+        letter-spacing: normal;  
+      }
+
+}
+.Wrong-sign-text, .wrong-reg-text{
+    font-size: 1rem;
+    color: var(--accent-rose);
+    padding: 1rem 0 0 0;
+    cursor: default;
+}
+
 .password{
     letter-spacing: .5rem;
     
@@ -143,6 +163,7 @@
     padding: .75rem 0;
     margin: 2rem 0 0 0;
     font-size: 1.2rem;
+    width: 15vw;
     background-color: var(--accent-rose);
     border: none;
     border-radius: .125rem;

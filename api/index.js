@@ -14,6 +14,9 @@ app.use("/user", userRouter);
 import logRouter from "./routes/log.js";
 app.use("/log", logRouter);
 
+import getUserRouter from "./routes/getUser.js";
+app.use("/getUser", getUserRouter);
+
 import db from "./models/index.js";
 db.sequelize.sync().then(() => {
   app.listen(3001, () => {
