@@ -87,10 +87,22 @@
     box-shadow: 0 0 1rem 0 var(--black-matteBlack);
 }
 
+
+
 .sign-container{
     display: flex;
     flex-direction: column;
     width: 15vw;
+}
+.logo-container{
+    position: absolute;
+    top: -8rem;
+    width: 15vw;
+    display: flex;
+    justify-content: center;
+}
+.logo-img{
+    width: 5rem;
 }
 .title, .register-title{
     font-size: 2.5rem;
@@ -250,6 +262,11 @@ hr{
     right: 0;
     box-shadow: 0 0 1rem 0 var(--black-matteBlack);
     animation: .8s ease-in-out forwards move-right;
+}
+.signin{
+    position: absolute;
+    display: inline;
+    opacity: 1;
 }
 .signin-show, .register-show{
     position: absolute;

@@ -2,7 +2,7 @@ import React from 'react'
 import { useEffect, useState, useRef } from 'react';
 import { useNavigate, Link, Navigate } from 'react-router-dom';
 import axios from "axios";
-
+import logo from "../../../assets/images/logo-color.png"
 import "./sign.css"
 export default function Sign() {
   let switcher = useRef(null);
@@ -157,12 +157,14 @@ export default function Sign() {
         <span className='bg-title'>Flan's To-Do List</span>
         <span className='bg-description'>A place to set up and manage your daily tasks!</span>
         <span className='bg-dev'>&copy; Matt-dev</span>
-      </div>
+    </div>
 
   <div className='all-container' ref={switcher}>
     
+      
     
 <div className='signin' ref={signIn}> 
+      <div className='logo-container'><img className='logo-img' src={logo} alt="logo" /></div>
       <div className='sign-container' >
         <span className="title">Sign in to Flan's</span>
         <span className="sign-text" ref={wrongText}>Enter your account details below</span>

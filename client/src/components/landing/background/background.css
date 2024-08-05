@@ -89,8 +89,7 @@
     animation: infinite ease-in-out 20s rotate1;
 }
 .arrow{
-    width: 1.5vw;
-    height: 1.5vw;
+    width: 5rem;
     z-index: 100;
     position: fixed;
 }

@@ -1,0 +1,68 @@
+:root{
+    --black-matteBlack: #28282B;
+    --black-default: #030104;
+    --black-picker: #232323;
+    --black-pickerLight: #2c2c2c;
+    
+    --white-offWhite: #FAF9F6;
+    --white-bone: 	#F9F6EE;
+    
+    --second-skyBlue: #87CEEB;
+    --second-steel:	#4682B4;
+    --second-indigo: 	#3F00FF;
+    
+    --accent-purple: #800080;
+    --accent-purple-light:	#9C6FE4;
+    --accent-rose: 	#F33A6A;
+    --accent-pink: 	#FFB6C1;
+
+    --gray: #333437;
+    --gray-picker-light: #C6C7C8;
+    --gray-picker-dark: #6B6D70;
+    --gray-picker: #98989B; 
+
+    --bright: brightness(100%);
+}
+
+.nav-container{
+    background-color: var(--black-pickerLight);
+    width: 6vw;
+    height: 100%;
+    position: fixed;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.icons-container{
+    padding: 5rem 0 0 0;
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+}
+.logo-icon{
+    padding: 1rem 0 0 .5rem;
+    width: 5rem;
+}
+.icon{
+    width: 2.5rem;
+    animation: .2s ease-out forwards bright-ani2;
+}
+.icon:hover{
+    animation: .2s ease-out forwards bright-ani;
+}
+@keyframes bright-ani {
+    0%{
+        filter: invert(75%) sepia(76%) saturate(4975%) hue-rotate(270deg) brightness(500%) contrast(99%)
+    }
+    100%{
+        filter: invert(75%) sepia(76%) saturate(4975%) hue-rotate(270deg) brightness(100%) contrast(99%);
+    }
+}
+@keyframes bright-ani2 {
+    0%{
+        filter: invert(75%) sepia(76%) saturate(4975%) hue-rotate(270deg) brightness(100%) contrast(99%);
+    }
+    100%{
+        filter: invert(75%) sepia(76%) saturate(4975%) hue-rotate(270deg) brightness(500%) contrast(100%);
+    }
+}

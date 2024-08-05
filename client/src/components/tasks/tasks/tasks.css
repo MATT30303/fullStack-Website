@@ -1,0 +1,117 @@
+:root{
+    --black-matteBlack: #28282B;
+    --black-default: #030104;
+    --black-picker: #232323;
+    --black-pickerLight: #2c2c2c;
+    
+    --white-offWhite: #FAF9F6;
+    --white-bone: 	#F9F6EE;
+    
+    --second-skyBlue: #87CEEB;
+    --second-steel:	#4682B4;
+    --second-indigo: 	#3F00FF;
+    
+    --accent-purple: #800080;
+    --accent-purple-light:	#9C6FE4;
+    --accent-rose: 	#F33A6A;
+    --accent-pink: 	#FFB6C1;
+
+    --gray: #333437;
+    --gray-picker-light: #C6C7C8;
+    --gray-picker-dark: #6B6D70;
+    --gray-picker: #98989B; 
+
+}
+*{
+    font-family: "Lato", sans-serif;
+}
+.tasks-tab{
+    position: absolute;
+    width: 94vw;
+    height: 100vh;
+    right: 0;
+    background-color: var(--black-pickerLight);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1;
+}
+.side-container{
+    position: absolute;
+    right: 1vw;
+    top: 2vh;
+    width: 23vw;
+    height: 97vh;
+    border: none;
+    border-radius: 2rem;
+    background-color: var(--black-picker);
+}
+.side-title{
+    color: var(--white-offWhite);
+    font-size: 3rem;
+    display: flex;
+    justify-content: center;
+    padding: 2rem;
+}
+.side-text{
+    color: var(--white-offWhite);
+    display: flex;
+    justify-content: center;
+    padding: 5rem 0 0 0;
+    font-size: 1.5rem;
+    font-family: "Lato", sans-serif;
+}
+.tasks-container{
+    position: absolute;
+    width: 69vw;
+    height: 98vh;
+    background-color: var(--black-picker);
+    bottom: 0;
+    left: 0;
+    border: none;
+    border-top-left-radius: 2rem;
+    border-top-right-radius: 2rem;
+}
+.header-container{
+    display: flex;
+    width: 100%;
+    justify-content: space-around;
+    padding: 2rem 0 0 0;
+}
+.header{
+    padding: 1rem 0rem;
+    width: 15vw;
+    text-align: center;
+    color: var(--white-offWhite);
+    background-color: var(--black-pickerLight);
+    border: none;
+    border-radius: 2rem;
+    font-size: 1.5rem;
+}
+.list-container{
+    position: absolute;
+    display: flex;
+    justify-content: space-around;
+    background-color: var(--black-picker);
+    margin: 8rem 0 0 0;
+    width: 100%;
+    height: 85%;
+    left: 0;
+    top: 0;
+}
+.tasks-list{
+    color: var(--white-offWhite);
+    display: flex;
+    justify-content: space-around;
+    text-align: left;
+    width: 15vw;
+    padding: 1rem 0rem;
+    background-color: var(--black-pickerLight);
+    border: none;
+    border-radius: 1rem;
+}
+.today-text{
+    color: var(--white-offWhite);
+    text-align: left;
+    width: 100%;
+}

@@ -19,18 +19,18 @@ router.get("/", async (req, res) => {
 
 router.post("/", async (req, res) => {
   try {
-    const { userID, title, description, status, priority, dueDate, dueTime, createdAt } = req.body;
+    const { userID, title, description, status, priority, category, dueDate, dueTime } = req.body;
 
-    if (!userID || !title || !description || !status || !priority || !dueDate || !createdAt) {
+    if (!userID || !title || !description || !status || !priority || !category || !dueDate) {
       return res.status(400).json({ message: "All fields are required" });
     }
 
     const query = `
-      INSERT INTO card (userID, title, description, status, priority, dueDate, dueTime, createdAt)
-      VALUES (:userID, :title, :description, :status, :priority, :dueDate, :dueTime, :createdAt)
+      INSERT INTO card (userID, title, description, status, priority, category, dueDate, dueTime)
+      VALUES (:userID, :title, :description, :status, :priority, :category, :dueDate, :dueTime)
     `;
     await sequelize.query(query, {
-      replacements: { userID, title, description, status, priority, dueDate, dueTime, createdAt },
+      replacements: { userID, title, description, status, priority, category, dueDate, dueTime },
       type: sequelize.QueryTypes.INSERT,
     });
 
