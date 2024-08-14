@@ -67,5 +67,28 @@ router.post("/check", async (req, res) => {
     console.error(e);
   }
 });
+router.post("/userCard", async (req, res) => {
+  try {
+    const { userID } = req.body;
 
+    if (!userID) {
+      return res.json("empty");
+    }
+
+    const query = `
+    SELECT *
+    from users 
+    where userID = :userID`;
+    const result = await sequelize.query(query, {
+      replacements: { userID },
+      type: sequelize.QueryTypes.SELECT,
+    });
+    if (!result[0]) res.json("incorrect");
+    else {
+      res.json(result);
+    }
+  } catch (e) {
+    console.error(e);
+  }
+});
 export default router;
