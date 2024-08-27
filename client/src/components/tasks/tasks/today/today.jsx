@@ -18,12 +18,13 @@ export default function TodayTasks({ todaysTasks, checkHandler, handleArrowClick
     <div className='tasks-list'>
       {todaysTasks.map((value) => (
         <div 
-        className={`tasks ${checkedTasks[value.taskID] ? "completed-task" : ""} ${expandedTaskId === value.taskID ? "expanded-task" : ""}`}
+        className={`tasks ${expandedTaskId === value.taskID ? "expanded-task" : ""} ${value.status === "completed" ? "completed-task" : ""}`}
         key={value.taskID} >
           <div className='checker'>
             <input
               type='checkbox'
               id={value.taskID}
+              defaultChecked={value.status === "completed" || checkedTasks[value.taskID]}
               onClick={(e) => {handleCheck(e,value.taskID); checkHandler(e, value); }}
               className='check-input'
             />

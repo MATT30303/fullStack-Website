@@ -17,7 +17,7 @@ router.get("/", async (req, res) => {
   }
 });
 
-router.post("/", async (req, res) => {
+router.post("/createCard", async (req, res) => {
   try {
     const { userID, title, description, status, priority, category, dueDate, dueTime } = req.body;
 

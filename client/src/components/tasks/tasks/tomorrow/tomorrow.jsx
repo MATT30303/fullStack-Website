@@ -5,26 +5,27 @@ import arrowRight from "../../../../assets/images/arrowRight.png";
 export default function TomorrowTasks({ tomorrowTasks, checkHandler, handleArrowClick,  handleExpantion, expandedTaskId }) {
   const [checkedTasks, setCheckedTasks] = useState({});
   const handleCheck = (e, taskID) => {
+    e.stopPropagation();
+
     const isChecked = e.target.checked;
     setCheckedTasks((prevCheckedTasks) => ({
       ...prevCheckedTasks,
       [taskID]: isChecked,
     }));
-
-    checkHandler(e, taskID); // Call the checkHandler passed down as props
   };
   
   return (
     <div className='tasks-list'>
       {tomorrowTasks.map((value) => (
         <div 
-        className={`tasks ${checkedTasks[value.taskID] ? "completed-task" : ""} ${expandedTaskId === value.taskID ? "expanded-task" : ""}`} 
+        className={`tasks ${expandedTaskId === value.taskID ? "expanded-task" : ""} ${value.status === "completed" ? "completed-task" : ""}`} 
         key={value.taskID} >
           <div className='checker'>
             <input
               type='checkbox'
               id={value.taskID}
-              onClick={(e) => {checkHandler(e, value); handleCheck(e,value.taskID)}}
+              defaultChecked={value.status === "completed" || checkedTasks[value.taskID]}
+              onClick={(e) => {handleCheck(e,value.taskID); checkHandler(e, value); }}
               className='check-input'
             />
             <label htmlFor={value.taskID} className='checkbox'>

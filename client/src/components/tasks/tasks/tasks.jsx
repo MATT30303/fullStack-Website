@@ -6,10 +6,9 @@ import TodayTasks from "./today/today.jsx";
 import TomorrowTasks from "./tomorrow/tomorrow.jsx";
 import ThisWeekTasks from "./week/week.jsx";
 import PendingTasks from "./pending/pending.jsx";
-import Sidebar from "./sidebar/sidebar.jsx"
-import sidebar from "./sidebar/sidebar.jsx";
+import SideTask from './sideTask/sideTask.jsx'
 
-export default function App() {
+export default function tasks() {
   const [listOfCards, setListOfCards] = useState([]);
   const [user, setUser] = useState([]);
   const [sideCard, setSideCard] = useState([]);
@@ -32,6 +31,7 @@ export default function App() {
   const[sidehour, sethour] = useState('');
   const [sidecreatedAt, setcreatedAt] = useState('');
   const [sideupdatedAt, setupdatedAT] = useState('');
+
 
 
   const [isChecked, setIsChecked] = useState(false)
@@ -119,8 +119,9 @@ export default function App() {
   };
   const handleArrowClick = (value) => {
     let currentDate = new Date().toJSON().slice(0, 10);
-
+    
     setSelectedTask(value); 
+    
     setUserID(value.userID);
     setTaskID(value.taskID);
     setTitle(value.title);
@@ -133,8 +134,12 @@ export default function App() {
     sethour(value.dueTime);
     setupdatedAT(currentDate);
 
-    sideTask.current.className="side-container-task";
+    //sideTask.current.className="side-container-task";
     sideDefault.current.className="side-container-none";
+
+
+    
+
   };
   const handleHitext = () => {
     userWelcome.current.innerHTML = "Hi, " + user[0].username;
@@ -142,8 +147,14 @@ export default function App() {
 
   const checkHandler = (e, value) => {
     const isChecked = e.target.checked;
-    e.stopPropagation();
+    if(isChecked){
+      value.status="completed";
+    }else{
+      value.status="progress";
+    }
+    
   }
+  /*
   const handleUpdate =() =>{
     const data = {
       taskID: sidetaskID,
@@ -193,9 +204,8 @@ export default function App() {
 
     }
   }
-  
+  */
   const handleTaskBack = () =>{
-    sideTask.current.className="side-container-task-none";
     sideDefault.current.className="side-container";
   }
   const handleExpantion = (taskID) =>{
@@ -203,55 +213,28 @@ export default function App() {
   }
 
   /*
-  
-      <div className='side-container' ref={sideDefault} >
-        <span className='side-title'>Welcome!</span>
-        <span className='side-text' ref={userWelcome}></span>
-      </div>
-
-
-      <div className='side-container-task'>
-        <button className="side-back">X</button>
-        <span className='side-title'>{task.title}</span>
-        <span className='side-subTitle'>Subtitle</span>
-        <div className="side-data">
-          <span className="side-status">Status:</span>
-          <span className="side-priority">Priority</span>
-          <span className="side-date">Date:   at:</span>
-          <span className="side-desc">Description: </span>
-        </div>
-        <div className="side-buttons">
-          <button className="side-button">Delete</button>
-          <button className="side-button">Update</button>
-        </div>
-      </div>
-  */
-
-  return (
-    <div className='tasks-tab'>
-      <div className='side-container' ref={sideDefault} >
-        <span className='side-title'>Welcome!</span>
-        <span className='side-text' ref={userWelcome}></span>
-      </div>
-
-<div className='side-container-task-none' ref={sideTask} >
+  <div className='side-container-task-none' ref={sideTask} >
         <button className="side-back" onClick={(e)=>handleTaskBack()}>X</button>
         <div className="side-data">
         <span className='side-title'>Task</span>
         
-
         <label htmlFor="side-subtitle" className="side-subtitle">Title:<input type="text" name="side-subtitle" className="side-subtitle-box" defaultValue={selectedTask?.title || ""} onChange={(e)=>{setTitle(e.target.value)}}/></label>
-          <label htmlFor="priority" className="side-priority">Priority:
+        
+        <label htmlFor="priority" className="side-priority">Priority:
             <select
               name="priority"
-              id=""
               className="select-priority"
-              defaultValue={selectedTask?.priority  || ""}
-              onChange={(e) =>{
-                setpriority(e.target.value);
-              }
-              }
+              value={selectedTask?.priority  || ""}
+              onChange={(e) => {
+                const newPriority = e.target.value;
+                setpriority(e.target.value)
+                setSelectedTask((prevTask) => ({
+                  ...prevTask,
+                  priority: newPriority,
+                }));
+              }}
             >
+              <option value='' hidden >{selectedTask?.priority|| "Select priority"}</option>
               <option value="low">Low</option>
               <option value="medium">Medium</option>
               <option value="high">High</option>
@@ -264,14 +247,19 @@ export default function App() {
               name="status"
               id=""
               className="select-status"
-              defaultValue={selectedTask?.status || ""}
-              onChange={(e) =>{
-                setstatus(e.target.value)
-              }
-              }
+              value={selectedTask?.status || ""}
+              onChange={(e) => {
+                const newStatus = e.target.value;
+                setstatus(e.target.value);
+                setSelectedTask((prevTask) => ({
+                  ...prevTask,
+                  status: newStatus,
+                }));
+              }}
             >
-              <option value="Progress">Progress</option>
-              <option value="Completed">Completed</option>
+              <option value='' hidden >{selectedTask?.status|| "Select status"}</option>
+              <option value="progress">Progress</option>
+              <option value="completed">Completed</option>
             </select>
           </label>
 
@@ -280,12 +268,17 @@ export default function App() {
               name="category"
               id=""
               className="select-category"
-              defaultValue={selectedTask?.category || ""}
-              onChange={(e) =>{
+              value={selectedTask?.category || ""}
+              onChange={(e) => {
+                const newCategory = e.target.value;
                 setcategory(e.target.value);
-              }
-              }
+                setSelectedTask((prevTask) => ({
+                  ...prevTask,
+                  category: newCategory,
+                }));
+              }}
             >
+              <option value='' hidden>{selectedTask?.category || "select category"}</option>
               <option value="work">Work</option>
               <option value="personal">Personal</option>
               <option value="family">Family</option>
@@ -304,13 +297,28 @@ export default function App() {
           <button className="side-button" onClick={handleUpdate}>Update</button>
         </div>
       </div>
+      
+  */
+
+  return (
+    <div id="tasks-tab" className='tasks-tab'>
+      
+      <div className='side-container' ref={sideDefault} >
+        <span className='side-title'>Welcome!</span>
+        <span className='side-text' ref={userWelcome}></span>
+      </div>
+
+      <SideTask selectedTask={selectedTask} setSelectedTask={setSelectedTask} handleTaskBack={handleTaskBack}></SideTask>
+      
       <div className='tasks-container'>
+        
         <div className='header-container'>
           <div className='header'>Today</div>
           <div className='header'>Tomorrow</div>
           <div className='header'>This week</div>
           <div className='header'>Pending</div>
         </div>
+
         <div className='list-container'>
           <TodayTasks
             todaysTasks={todaysTasks}

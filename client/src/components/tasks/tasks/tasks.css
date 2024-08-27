@@ -30,7 +30,7 @@
     width: 94vw;
     height: 100vh;
     right: 0;
-    background-color: var(--black-pickerLight);
+    background-color: transparent;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -110,20 +110,18 @@
 .side-data{
     display: flex;
     flex-direction: column;
-    padding: 10% 0 0 0;
+    padding: 0 0 0 0;
     width: 90%;
     margin: 0 0 0 1rem;
-    height: 70%;
-    gap: 2rem;
+    height: 100%;
+    gap: 3rem;
 }
 .side-subtitle, .side-status, .side-priority, .side-date, .side-desc, .side-hour, .side-category{
-    color: var(--white-bone);
-    font-size: 1.2rem;
+    color: var(--white-offWhite);
+    width: 100%;
     display: flex;
-    width: 90%;
     justify-content: space-between;
-    text-align: center;
-    align-items: center;
+    font-size: 1.5rem;
 }
 .side-subtitle-box, .select-priority, .select-status, .side-date-box, .side-hour-box, .side-desc-area, .select-category{
     background-color: var(--black-pickerLight);
@@ -132,7 +130,7 @@
     height: 4vh;
     padding: 0 1rem;
     font-size: 1rem;
-    border: thin solid var(--black-pickerLight);
+    border: .125rem solid var(--black-pickerLight);
     border-bottom: .125rem solid var(--accent-pink);
     border-radius: .5rem;
     appearance: none;
@@ -140,6 +138,23 @@
 }
 .select-priority, .select-status, .select-category{
     width: calc(10vw + 1rem);
+    height: 4vh;
+    background-color: var(--black-pickerLight);
+    border: .125rem solid var(--black-pickerLight);
+    border-bottom: .125rem solid var(--accent-pink);
+    border-radius: .5rem;
+    font-size: 1rem;
+    padding: 0 0 0 1rem;
+    color: var(--white-offWhite);
+    outline: none; 
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    background-image: url("data:image/svg+xml;utf8,<svg fill='white' height='24' viewBox='0 0 24 24' width='24' xmlns='http://www.w3.org/2000/svg'><path d='M7 10l5 5 5-5z'/><path d='M0 0h24v24H0z' fill='none'/></svg>");
+    background-repeat: no-repeat;
+    background-position-x: 100%;
+    background-position-y: 5px;
+    cursor: pointer;
 }
 .side-date-box, .side-hour-box{
     cursor: default;
@@ -154,10 +169,11 @@
     height: 10vh;
     padding-top: 1rem;
 }
-.select-priority:focus, .select-status:focus, .side-date-box:focus, .side-hour-box:focus, .side-desc-area:focus{
-    border: thin solid var(--black-pickerLight);
-    border-bottom: .125rem solid var(--accent-pink);
+select:focus, .side-date-box:focus, .side-hour-box:focus, .side-desc-area:focus, .side-subtitle-box:focus{
     outline: none;
+    border: .125rem solid var(--black-picker);
+    border-bottom: .125rem solid var(--accent-pink);
+    background-color: var(--black-picker);
 }
 option{
     color: var(--white-bone);
@@ -229,7 +245,7 @@ option{
     border: none;
     border-radius: 2rem;
     font-size: 1.5rem;
-    border-bottom: .125rem solid var(--accent-purple-light);
+    border-bottom: .125rem solid var(--accent-pink);
 }
 .list-container{
     position: absolute;
@@ -266,10 +282,12 @@ option{
     padding: 0 0;
     margin: 0 0 1rem 0;
     overflow-wrap: anywhere;
+    border-left: thin solid var(--accent-pink);
+    border-right: thin solid var(--accent-pink);
     border-radius: 1rem;
     user-select: none;
-    transition: box-shadow .2s ease-in-out;
     overflow: hidden;
+    
     .task-info{
         animation: closetxt .4s ease-in-out forwards;
         animation-delay: .4s;
@@ -288,12 +306,13 @@ option{
             animation: .2s ease-in-out forwards desc-hide;
         }
     }
-    transition: min-height .2s ease-in-out, padding .2s ease-in-out;
-    transition-delay: 1s;
+    transition: min-height .2s ease-in-out 1s, padding .2s ease-in-out 1s, box-shadow .2s ease-in-out;
+}
+.tasks:hover{
+    box-shadow: 0rem 0rem 1rem -.4rem var(--accent-pink);
 }
 .tasks.completed-task{
     text-decoration: line-through;
-    transition: box-shadow .2s ease-in-out;
 }
 
 .task-info{

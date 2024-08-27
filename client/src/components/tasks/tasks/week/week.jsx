@@ -10,8 +10,6 @@ export default function ThisWeekTasks({ WeekTasks, checkHandler, handleArrowClic
       ...prevCheckedTasks,
       [taskID]: isChecked,
     }));
-
-    checkHandler(e, taskID); // Call the checkHandler passed down as props
   };
 
 
@@ -21,13 +19,14 @@ export default function ThisWeekTasks({ WeekTasks, checkHandler, handleArrowClic
   return (
     <div className='tasks-list'>
       {WeekTasks.map((value) => (
-        <div className={`tasks ${checkedTasks[value.taskID] ? "completed-task" : ""} ${expandedTaskId === value.taskID ? "expanded-task" : ""}`} 
+        <div className={`tasks ${expandedTaskId === value.taskID ? "expanded-task" : ""} ${value.status === "completed" ? "completed-task" : ""}`} 
         key={value.taskID}>
           <div className='checker'>
             <input
               type='checkbox'
               id={value.taskID}
-              onClick={(e) => {checkHandler(e, value); handleCheck(e,value.taskID)}}
+              defaultChecked={value.status === "completed" || checkedTasks[value.taskID]}
+              onClick={(e) => {handleCheck(e,value.taskID); checkHandler(e, value); }}
               className='check-input'
             />
             <label htmlFor={value.taskID} className='checkbox'>
