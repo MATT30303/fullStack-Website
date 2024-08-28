@@ -7,7 +7,7 @@ import "./navbar.css"
 export default function Navbar() {
   const html = document.querySelector('html');
   if (html) {
-    html.style.overflow = 'hidden'; 
+    html.style.overflow = ''; 
   }
 
   return (
@@ -17,7 +17,7 @@ export default function Navbar() {
             <div className="icons-container">
                 <a href="#tasks-tab"><img className='icon' src={apps} alt="" /></a>
                 <a href='#newTask-tab'><img className='icon' src={note} alt=""/></a>
-                <a href="#"><img className='icon' src={profile} alt="" /></a>
+                <a href="#user-tab"><img className='icon' src={profile} alt="" /></a>
             </div>
           </div>
         </div>

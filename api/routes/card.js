@@ -112,4 +112,29 @@ router.post("/deleteCard", async (req, res) => {
   }
 });
 
+router.post("/statusCard", async (req, res) => {
+  try {
+    const { taskID, status } = req.body;
+
+    if (!taskID || !status) {
+      return res.json("incorrect");
+    }
+
+    const query = `
+      UPDATE card
+      set status = :status
+      WHERE taskID = :taskID
+    `;
+    await sequelize.query(query, {
+      replacements: { taskID, status },
+      type: sequelize.QueryTypes.UPDATE,
+    });
+
+    res.json("correct");
+  } catch (e) {
+    console.error(e);
+    res.status(500).send(e.message);
+  }
+});
+
 export default router;

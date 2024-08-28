@@ -1,6 +1,6 @@
 import React from "react";
 import { useState } from "react";
-import arrowRight from "../../../../assets/images/arrowRight.png";
+import arrowRight from "../../../../assets/images/transparent-arrow.png";
 
 export default function TomorrowTasks({ tomorrowTasks, checkHandler, handleArrowClick,  handleExpantion, expandedTaskId }) {
   const [checkedTasks, setCheckedTasks] = useState({});
@@ -36,7 +36,7 @@ export default function TomorrowTasks({ tomorrowTasks, checkHandler, handleArrow
           </div>
           <div className="task-info" onClick={(e) => {handleExpantion(value.taskID); e.stopPropagation()}}>
             <div className='tasks-title'>{value.title} </div>
-            <div className='tasks-description'>{value.description}</div>
+            <div className='tasks-description'>{value.description}  <br/><br/> {value.dueTime}</div>
           </div>
           <div>
             <img

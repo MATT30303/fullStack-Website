@@ -121,7 +121,7 @@ export default function tasks() {
     let currentDate = new Date().toJSON().slice(0, 10);
     
     setSelectedTask(value); 
-    
+
     setUserID(value.userID);
     setTaskID(value.taskID);
     setTitle(value.title);
@@ -134,12 +134,7 @@ export default function tasks() {
     sethour(value.dueTime);
     setupdatedAT(currentDate);
 
-    //sideTask.current.className="side-container-task";
     sideDefault.current.className="side-container-none";
-
-
-    
-
   };
   const handleHitext = () => {
     userWelcome.current.innerHTML = "Hi, " + user[0].username;
@@ -147,158 +142,30 @@ export default function tasks() {
 
   const checkHandler = (e, value) => {
     const isChecked = e.target.checked;
-    if(isChecked){
-      value.status="completed";
-    }else{
-      value.status="progress";
-    }
+    isChecked? value.status="completed" : value.status="progress";
     
-  }
-  /*
-  const handleUpdate =() =>{
-    const data = {
-      taskID: sidetaskID,
-      title: sidetitle,
-      description: sidedescription,
-      status: sidestatus,
-      priority: sidepriority,
-      category: sidecategory,
-      dueDate: sidedate,
-      dueTime: sidehour,
-      updatedAt: sideupdatedAt
+    const data={
+      taskID: value.taskID,
+      status: value.status
     }
-
     try{
-      axios.post("http://localhost:3001/card/updateCard",data).then((response)=>{
+      axios.post("http://localhost:3001/card/statusCard",data).then((response)=>{
         if(response.data === "incorrect"){
-          sideError.current.innerHTML="Something went wrong. <br>Please try again later."
-        }else{
-          sideError.current.innerHTML="";
-          window.location.reload();
+          alert("Something went wrong. Please try again later")
         }
       })
     }catch (error) {
-      console.error("Error updating:", error);
-    }
-  }
-  const handleDelete = () =>{
-    const data= {
-      taskID: sidetaskID
+      console.error("Error creating:", error);
     }
 
-    if(confirm("Estas a punto de borrar esta tarea. \nEsta seguro de esto?")){
-      try{
-        axios.post("http://localhost:3001/card/deleteCard",data).then((response)=>{
-          if(response.data === "incorrect"){
-            sideError.current.innerHTML="Something went wrong. <br>Please try again later."
-          }else{
-            sideError.current.innerHTML="";
-            window.location.reload();
-          }
-        })
-      }catch (error) {
-        console.error("Error updating:", error);
-      }
-    }
-    else{
 
-    }
   }
-  */
   const handleTaskBack = () =>{
     sideDefault.current.className="side-container";
   }
   const handleExpantion = (taskID) =>{
     setExpandedTaskId((prevTaskId) => (prevTaskId === taskID ? null : taskID));
   }
-
-  /*
-  <div className='side-container-task-none' ref={sideTask} >
-        <button className="side-back" onClick={(e)=>handleTaskBack()}>X</button>
-        <div className="side-data">
-        <span className='side-title'>Task</span>
-        
-        <label htmlFor="side-subtitle" className="side-subtitle">Title:<input type="text" name="side-subtitle" className="side-subtitle-box" defaultValue={selectedTask?.title || ""} onChange={(e)=>{setTitle(e.target.value)}}/></label>
-        
-        <label htmlFor="priority" className="side-priority">Priority:
-            <select
-              name="priority"
-              className="select-priority"
-              value={selectedTask?.priority  || ""}
-              onChange={(e) => {
-                const newPriority = e.target.value;
-                setpriority(e.target.value)
-                setSelectedTask((prevTask) => ({
-                  ...prevTask,
-                  priority: newPriority,
-                }));
-              }}
-            >
-              <option value='' hidden >{selectedTask?.priority|| "Select priority"}</option>
-              <option value="low">Low</option>
-              <option value="medium">Medium</option>
-              <option value="high">High</option>
-            </select>
-          </label>
-          
-          
-          <label htmlFor="status" className="side-status">Status:
-            <select
-              name="status"
-              id=""
-              className="select-status"
-              value={selectedTask?.status || ""}
-              onChange={(e) => {
-                const newStatus = e.target.value;
-                setstatus(e.target.value);
-                setSelectedTask((prevTask) => ({
-                  ...prevTask,
-                  status: newStatus,
-                }));
-              }}
-            >
-              <option value='' hidden >{selectedTask?.status|| "Select status"}</option>
-              <option value="progress">Progress</option>
-              <option value="completed">Completed</option>
-            </select>
-          </label>
-
-          <label htmlFor="category" className="side-category">Category:
-            <select
-              name="category"
-              id=""
-              className="select-category"
-              value={selectedTask?.category || ""}
-              onChange={(e) => {
-                const newCategory = e.target.value;
-                setcategory(e.target.value);
-                setSelectedTask((prevTask) => ({
-                  ...prevTask,
-                  category: newCategory,
-                }));
-              }}
-            >
-              <option value='' hidden>{selectedTask?.category || "select category"}</option>
-              <option value="work">Work</option>
-              <option value="personal">Personal</option>
-              <option value="family">Family</option>
-            </select>
-          </label>
-
-          
-          <label htmlFor="date" className="side-date">Date:<input type="date" name="date" className="side-date-box" defaultValue={selectedTask?.dueDate || ""} onChange={(e)=>{setdate(e.target.value)}}/></label>
-          <label htmlFor="hour" className="side-hour">Hour:<input type="time" name="hour" className="side-hour-box" defaultValue={selectedTask?.dueTime || ""} onChange={(e)=>{sethour(e.target.value)}}/></label>
-          
-          <label htmlFor="description" className="side-desc">Description: <textarea name="description" id="description" className="side-desc-area" defaultValue={selectedTask?.description || ""}onChange={(e)=>{setdescription(e.target.value)}} ></textarea></label>
-          <div className="side-error" ref={sideError}></div>
-        </div>
-        <div className="side-buttons">
-          <button className="side-button" onClick={handleDelete}>Delete</button>
-          <button className="side-button" onClick={handleUpdate}>Update</button>
-        </div>
-      </div>
-      
-  */
 
   return (
     <div id="tasks-tab" className='tasks-tab'>

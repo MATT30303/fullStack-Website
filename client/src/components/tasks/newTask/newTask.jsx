@@ -92,7 +92,7 @@ export default function newTask() {
           <label htmlFor="date" className="newTask-date">Date:<input type="date" name="date" className="newTask-date-box" onChange={(e)=>{setDate(e.target.value)}} /></label>
           <label htmlFor="hour" className="newTask-hour">Hour:<input type="time" name="hour" className="newTask-hour-box" onChange={(e)=>{setHour(e.target.value)}} /></label>
           
-          <label htmlFor="description" className="newTask-desc">Description: <textarea name="description" id="description" className="newTask-desc-area" placeholder='- - -'onChange={(e)=>{setDesc(e.target.value)}}></textarea></label>
+          <label htmlFor="" className="newTask-desc">Description: <textarea name="description" id="description" className="newTask-desc-area" placeholder='- - -'onChange={(e)=>{setDesc(e.target.value)}}></textarea></label>
           <div className="newTask-error" ref={error} ></div>
           <div className="newTask-buttons">
             <a className="newTask-button" href="#">Back</a>
