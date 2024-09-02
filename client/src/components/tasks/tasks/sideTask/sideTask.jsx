@@ -1,10 +1,11 @@
 import React, { useEffect, useRef, useState } from 'react'
 import axios from "axios";
+import toast, { Toaster } from 'react-hot-toast';
 import "./sideTask.css"
-export default function sideTask({selectedTask, setSelectedTask , handleTaskBack}) {
+export default function sideTask({selectedTask, setSelectedTask , handleTaskBack, count, setCount, setReload}) {
   let sideError = useRef(null);
   let sideTask = useRef(null);
-  let [count, setCount] = useState(0);
+  
 
   const[sidetaskID, setTaskID] = useState('');
   const[sideuserID, setUserID] = useState('');
@@ -17,12 +18,14 @@ export default function sideTask({selectedTask, setSelectedTask , handleTaskBack
   const[sidehour, sethour] = useState('');
   const [sidecreatedAt, setcreatedAt] = useState('');
   const [sideupdatedAt, setupdatedAT] = useState('');
+  
 
   const handleBack = () =>{
     sideTask.current.className="side-container-task-none";
+    setCount(0)
   }
   useEffect(()=>{
-    if(count > 0){
+    if(count == 1){
       sideTask.current.className="side-container-task";
 
       let currentDate = new Date().toJSON().slice(0, 10);
@@ -37,11 +40,10 @@ export default function sideTask({selectedTask, setSelectedTask , handleTaskBack
       setdate(selectedTask.dueDate);
       sethour(selectedTask.dueTime);
       setupdatedAT(currentDate);
-
     }else{
-      setCount(count+1);
+      setSelectedTask('')
     }
-  },[selectedTask])
+  },[count])
 
   const handleUpdate =() =>{
     const data = {
@@ -55,20 +57,28 @@ export default function sideTask({selectedTask, setSelectedTask , handleTaskBack
       dueTime: sidehour,
       updatedAt: sideupdatedAt
     }
-    console.log(data);
     
+    const toastId = toast.loading('Updating...');
     try{
       axios.post("http://localhost:3001/card/updateCard",data).then((response)=>{
         if(response.data === "incorrect"){
-          sideError.current.innerHTML="Something went wrong. <br>Please try again later."
+          toast.error("Something went wrong. Try again later",{
+            id: toastId,
+          })
         }else{
-          sideError.current.innerHTML="";
-          window.location.reload();
+          handleBack();
+          handleTaskBack();
+          toast.success('Updated successfully', {
+            id: toastId,
+          });
         }
       })
     }catch (error) {
-      console.error("Error updating:", error);
+      toast.error("Something went wrong. Try again later",{
+        id: toastId,
+      })
     }
+       
     
   }
   const handleDelete = () =>{
@@ -98,11 +108,29 @@ export default function sideTask({selectedTask, setSelectedTask , handleTaskBack
   return (
     
     <div className='side-container-task-none' ref={sideTask} >
+      <div><Toaster
+          toastOptions={{
+            className: '',
+            style: {
+              border: '1px solid #FFB6C1',
+              padding: '16px',
+              color: '#FAF9F6',
+              background: "#2c2c2c",
+            },
+            error: {
+              style: {
+                border: '1px solid #F33A6A',
+                padding: '16px',
+                color: '#FAF9F6',
+                background: "#2c2c2c",
+              },
+        }}}
+      /></div>
         <button className="side-back" onClick={(e)=>{handleBack(); handleTaskBack()}}>X</button>
         <div className="side-data">
         <span className='side-title'>Task</span>
         
-        <label htmlFor="side-subtitle" className="side-subtitle">Title:<input type="text" name="side-subtitle" className="side-subtitle-box" defaultValue={selectedTask?.title || ""} onChange={(e)=>{setTitle(e.target.value)}}/></label>
+        <label htmlFor="side-subtitle" className="side-subtitle">Title:<input type="text" name="side-subtitle" className="side-subtitle-box" value={selectedTask?.title || ''}onChange={(e)=>{setTitle(e.target.value); selectedTask.title= e.target.value}}/></label>
         
         <label htmlFor="priority" className="side-priority">Priority:
             <select
@@ -111,6 +139,7 @@ export default function sideTask({selectedTask, setSelectedTask , handleTaskBack
               value={selectedTask?.priority  || ""}
               onChange={(e) => {
                 const newPriority = e.target.value;
+                selectedTask.priority = e.target.value;
                 setpriority(e.target.value)
                 setSelectedTask((prevTask) => ({
                   ...prevTask,
@@ -133,6 +162,7 @@ export default function sideTask({selectedTask, setSelectedTask , handleTaskBack
               value={selectedTask?.status || ""}
               onChange={(e) => {
                 const newStatus = e.target.value;
+                selectedTask.status = e.target.value;
                 setstatus(e.target.value);
                 setSelectedTask((prevTask) => ({
                   ...prevTask,
@@ -153,6 +183,7 @@ export default function sideTask({selectedTask, setSelectedTask , handleTaskBack
               value={selectedTask?.category || ""}
               onChange={(e) => {
                 const newCategory = e.target.value;
+                selectedTask.category = e.target.value;
                 setcategory(e.target.value);
                 setSelectedTask((prevTask) => ({
                   ...prevTask,
@@ -168,11 +199,10 @@ export default function sideTask({selectedTask, setSelectedTask , handleTaskBack
           </label>
 
           
-          <label htmlFor="date" className="side-date">Date:<input type="date" name="date" className="side-date-box" defaultValue={selectedTask?.dueDate || ""} onChange={(e)=>{setdate(e.target.value)}}/></label>
-          <label htmlFor="hour" className="side-hour">Hour:<input type="time" name="hour" className="side-hour-box" defaultValue={selectedTask?.dueTime || ""} onChange={(e)=>{sethour(e.target.value)}}/></label>
+          <label htmlFor="date" className="side-date">Date:<input type="date" name="date" className="side-date-box" defaultValue={selectedTask?.dueDate || ""} onChange={(e)=>{setdate(e.target.value); selectedTask.dueDate = e.target.value}}/></label>
+          <label htmlFor="hour" className="side-hour">Hour:<input type="time" name="hour" className="side-hour-box" defaultValue={selectedTask?.dueTime || ""} onChange={(e)=>{sethour(e.target.value); selectedTask.dueTime = e.target.value}}/></label>
           
-          <label htmlFor="description" className="side-desc">Description: <textarea name="description" id="description" className="side-desc-area" defaultValue={selectedTask?.description || ""}onChange={(e)=>{setdescription(e.target.value)}} ></textarea></label>
-          <div className="side-error" ref={sideError}></div>
+          <label htmlFor="description" className="side-desc">Description: <textarea name="description" id="description" className="side-desc-area" defaultValue={selectedTask?.description || ""}onChange={(e)=>{setdescription(e.target.value); selectedTask.description = e.target.value}} ></textarea></label>
         </div>
         <div className="side-buttons">
           <button className="side-button" onClick={handleDelete}>Delete</button>

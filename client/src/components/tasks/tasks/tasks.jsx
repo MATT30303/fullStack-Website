@@ -6,12 +6,12 @@ import TodayTasks from "./today/today.jsx";
 import TomorrowTasks from "./tomorrow/tomorrow.jsx";
 import ThisWeekTasks from "./week/week.jsx";
 import PendingTasks from "./pending/pending.jsx";
-import SideTask from './sideTask/sideTask.jsx'
+import SideTask from './sideTask/sideTask.jsx';
+import toast, { Toaster } from 'react-hot-toast';
 
 export default function tasks() {
   const [listOfCards, setListOfCards] = useState([]);
   const [user, setUser] = useState([]);
-  const [sideCard, setSideCard] = useState([]);
   const [todaysTasks, setTodaysTasks] = useState([]);
   const [tomorrowTasks, setTomorrowTasks] = useState([]);
   const [WeekTasks, setWeekTasks] = useState([]);
@@ -19,27 +19,14 @@ export default function tasks() {
   const [pending, setPending] = useState([]);
   const [selectedTask, setSelectedTask] = useState(null);
   const [expandedTaskId, setExpandedTaskId] = useState(null);
+  const [count, setCount] = useState(0);
+  const [reload, setReload] = useState(true);
 
-  const[sidetaskID, setTaskID] = useState('');
-  const[sideuserID, setUserID] = useState('');
-  const [sidetitle, setTitle] = useState('');
-  const [sidedescription, setdescription] = useState('');
-  const[sidestatus, setstatus] = useState('');
-  const[sidepriority, setpriority] = useState('');
-  const [sidecategory, setcategory] = useState('');
-  const[sidedate, setdate] = useState('');
-  const[sidehour, sethour] = useState('');
-  const [sidecreatedAt, setcreatedAt] = useState('');
-  const [sideupdatedAt, setupdatedAT] = useState('');
-
-
-
-  const [isChecked, setIsChecked] = useState(false)
+  
+ 
 
   let userWelcome = useRef(null);
-  let sideTask = useRef(null);
   let sideDefault = useRef(null);
-  let sideError = useRef(null);
 
   
 
@@ -66,6 +53,7 @@ export default function tasks() {
         console.error("Error fetching user:", error);
       }
     };
+
     fetchData();
   }, []);
 
@@ -75,6 +63,7 @@ export default function tasks() {
     }
 
   }, [listOfCards]);
+
   useEffect(() => {
     if (user.length > 0) {
       handleHitext();
@@ -118,22 +107,8 @@ export default function tasks() {
     setPending(pending);
   };
   const handleArrowClick = (value) => {
-    let currentDate = new Date().toJSON().slice(0, 10);
-    
+    setCount(1);
     setSelectedTask(value); 
-
-    setUserID(value.userID);
-    setTaskID(value.taskID);
-    setTitle(value.title);
-    setdescription(value.description);
-    setstatus(value.status);
-    setpriority(value.priority);
-    setcategory(value.category);
-    setcreatedAt(value.createdAt);
-    setdate(value.dueDate);
-    sethour(value.dueTime);
-    setupdatedAT(currentDate);
-
     sideDefault.current.className="side-container-none";
   };
   const handleHitext = () => {
@@ -155,13 +130,14 @@ export default function tasks() {
         }
       })
     }catch (error) {
-      console.error("Error creating:", error);
+      console.error("Error updating:", error);
     }
 
 
   }
   const handleTaskBack = () =>{
     sideDefault.current.className="side-container";
+    setSelectedTask('');
   }
   const handleExpantion = (taskID) =>{
     setExpandedTaskId((prevTaskId) => (prevTaskId === taskID ? null : taskID));
@@ -169,13 +145,31 @@ export default function tasks() {
 
   return (
     <div id="tasks-tab" className='tasks-tab'>
+      <div><Toaster
+          toastOptions={{
+            className: '',
+            style: {
+              border: '1px solid #FFB6C1',
+              padding: '16px',
+              color: '#FAF9F6',
+              background: "#2c2c2c",
+            },
+            error: {
+              style: {
+                border: '1px solid #F33A6A',
+                padding: '16px',
+                color: '#FAF9F6',
+                background: "#2c2c2c",
+              },
+        }}}
+      /></div>
       
       <div className='side-container' ref={sideDefault} >
         <span className='side-title'>Welcome!</span>
         <span className='side-text' ref={userWelcome}></span>
       </div>
 
-      <SideTask selectedTask={selectedTask} setSelectedTask={setSelectedTask} handleTaskBack={handleTaskBack}></SideTask>
+      <SideTask selectedTask={selectedTask} setSelectedTask={setSelectedTask} handleTaskBack={handleTaskBack} count={count} setCount={setCount} setReload={setReload}></SideTask>
       
       <div className='tasks-container'>
         
