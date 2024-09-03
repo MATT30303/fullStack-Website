@@ -66,19 +66,7 @@ a{
     gap: 3rem;
     z-index: 2;
 }
-.newTask-back{
-    font-size: 1.5rem;
-    background-color: var(--black-pickerLight);
-    color: var(--white-bone);
-    padding: .5rem 1rem;
-    border: none;
-    border-radius: 1rem;
-    position: absolute;
-    right: 2rem;
-    top: 1rem;
-    cursor: pointer;
-    box-shadow:.1rem .1rem 0 0 var(--accent-pink);
-}
+
 .newTask-title, .newTask-subtitle, .newTask-priority, .newTask-status, .newTask-category, .newTask-date, .newTask-hour, .newTask-desc, .newTask-buttons{
     color: var(--white-offWhite);
     width: 100%;
@@ -157,18 +145,19 @@ option{
     padding: 0 0 2rem 0;
 }
 .newTask-button{
-    background-color: var(--black-pickerLight);
-    color: var(--white-offWhite);
+    background-color: rgba(255,182,193,.7);
+    box-shadow: .1rem .1rem .2rem var(--black-default);
+    color: var(--black-matteBlack);
     font-size: 1.2rem;
     width: 6vw;
     padding: .5rem 0rem;
     border: none;
-    border-bottom: .125rem solid var(--accent-pink);
     border-radius: 1rem;
     cursor: pointer;
     translate: 0 0;
-    transition: translate .2s ease-in-out;
+    transition: translate .1s ease-in-out;
 }
 .newTask-button:hover{
-    translate: 0 -.2rem;
+    translate: 0 -.1rem;
+    background-color: rgba(255,182,193,1);
 }

@@ -23,3 +23,9 @@
     --gray-picker: #98989B; 
 
 }
+*{
+    margin: 0;
+    padding: 0;
+    color: var(--white-offWhite);
+    font-family: "Lato", sans-serif;
+}

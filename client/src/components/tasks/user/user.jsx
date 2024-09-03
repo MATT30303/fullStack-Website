@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from 'react'
 import axios from "axios"
 import "./user.css"
 
+import picture from "../../../assets/images/picture_icon.png";
 import image1 from "../../../assets/profile_fotos/pf_default.png"
 import image2 from "../../../assets/profile_fotos/pf_depre.png"
 import image3 from "../../../assets/profile_fotos/pf_disco.png"
@@ -18,7 +19,31 @@ import image12 from "../../../assets/profile_fotos/pf_zarpade.png"
 export default function user() {
   const [user, setUser] = useState([]);
 
+  const [userUsername, setUserUsername] = useState('');
+  const [userEmail, setUserEmail] = useState('');
+  const [userpassword, setUserpassword] = useState('');
+  const [userConfirmPassword, setUserConfirmPassword] = useState('');
+  const [userfirstName, setUserfirstName] = useState('');
+  const [userlastName, setUserlastName] = useState('');
+  const [userUpdated, setUserUpdated] = useState('');
 
+  const pic = [
+    image1,
+    image2,
+    image3,
+    image4,
+    image5,
+    image6,
+    image7,
+    image8,
+    image9,
+    image10,
+    image11,
+    image12,
+  ];
+  const pfp = pic.map((pic)=>{
+    <img src={pic} className='pfp'></img>
+  })
 
 
   useEffect(()=>{
@@ -33,24 +58,72 @@ export default function user() {
     };
     fetchData();
   },[])
-  useEffect(()=>{
 
+  useEffect(()=>{
+    setUserUsername(user.username);
+    setUserEmail(user.email);
+    setUserpassword(user.password);
+    setUserConfirmPassword(user.pasword);
+    setUserfirstName(user.firstName);
+    setUserlastName(user.lastName);
   },[user])
+
 
 
 
   return (
     <div className="user-tab" id='user-tab'>
         <div className="user-container">
+          
           <div className="user-title">PROFILE</div>
-          <div className='user-pic'><img src={image2} alt="" className='profile-pic'/></div>
-          <div className="user-data">
-            <div className="user-username"></div>
-            <div className="user-email"></div>
-            <div className="user-password"></div>
-            <div className="user-firstName"></div>
-            <div className="user-lastName"></div>
+          
+          <div className='user-pic'>
+            <img src={pic[user.pic]} alt="" className='profile-pic'/>
+            <img src={picture} alt=""className='select-pic' />
+            <div className='user-pfp'>
+              {pic.map((pic)=>(
+                <img className='pfp' src={pic} alt="" />
+              ))}
+            </div>
+
+          
           </div>
+
+
+
+          <div className='user-date'>
+            <span className='date-span'>account creation date: {user.createdAt || "undefined"}</span>
+          </div>
+
+          <div className='user-button'>
+            <button className='button-save'>SAVE</button>
+          </div>
+
+          <div className="user-data">
+            <div className="user-username">
+              <span className='username-span'>USER NAME</span>
+              <input type="text" className='username-input'/>
+            </div>
+            <div className="user-email">
+            <span className='email-span'>E-MAIL</span>
+            <input type="email" className='email-input'/>
+            </div>
+            <div className="user-password">
+            <span className='password-span'>PASSWORD</span>
+            <input type="password" className='password-input'/>
+            </div>
+            <div className="user-firstName">
+            <span className='firstName-span'>FIRST NAME</span>
+            <input type="text" className='firstName-input'/>
+            </div>
+            <div className="user-lastName">
+            <span className='lastName-span'>LAST NAME</span>
+            <input type="text" className='lastName-input'/>
+            </div>
+          </div>
+
+          
+          
         </div>
     </div>
   )
