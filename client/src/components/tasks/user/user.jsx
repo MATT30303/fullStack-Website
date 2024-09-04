@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react'
 import axios from "axios"
+import toast, { Toaster } from 'react-hot-toast';
 import "./user.css"
 
 import picture from "../../../assets/images/picture_icon.png";
@@ -41,17 +42,13 @@ export default function user() {
     image11,
     image12,
   ];
-  const pfp = pic.map((pic)=>{
-    <img src={pic} className='pfp'></img>
-  })
-
 
   useEffect(()=>{
     const fetchData = async () => {
       try {
         const data = { userID: 1 };
         const response = await axios.post("http://localhost:3001/user/userCard", data);
-        setUser(response.data);
+        setUser(response.data[0]);
       } catch (error) {
         console.error("Error fetching cards:", error);
       }
@@ -69,10 +66,28 @@ export default function user() {
   },[user])
 
 
-
-
   return (
     <div className="user-tab" id='user-tab'>
+      <div><Toaster
+          toastOptions={{
+            className: '',
+            style: {
+              border: '1px solid #FFB6C1',
+              padding: '16px',
+              color: '#FAF9F6',
+              background: "#2c2c2c",
+            },
+            error: {
+              style: {
+                border: '1px solid #F33A6A',
+                padding: '16px',
+                color: '#FAF9F6',
+                background: "#2c2c2c",
+              },
+        }}}
+      /></div>
+
+
         <div className="user-container">
           
           <div className="user-title">PROFILE</div>
@@ -81,8 +96,8 @@ export default function user() {
             <img src={pic[user.pic]} alt="" className='profile-pic'/>
             <img src={picture} alt=""className='select-pic' />
             <div className='user-pfp'>
-              {pic.map((pic)=>(
-                <img className='pfp' src={pic} alt="" />
+              {pic.map((pic, index) => (
+                <img src={pic} key={index} className='pfp' alt={`Profile ${index}`} />
               ))}
             </div>
 

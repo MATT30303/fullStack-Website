@@ -9,7 +9,7 @@ import PendingTasks from "./pending/pending.jsx";
 import SideTask from './sideTask/sideTask.jsx';
 import toast, { Toaster } from 'react-hot-toast';
 
-export default function tasks() {
+export default function tasks({reload, refresh}) {
   const [listOfCards, setListOfCards] = useState([]);
   const [user, setUser] = useState([]);
   const [todaysTasks, setTodaysTasks] = useState([]);
@@ -20,7 +20,6 @@ export default function tasks() {
   const [selectedTask, setSelectedTask] = useState(null);
   const [expandedTaskId, setExpandedTaskId] = useState(null);
   const [count, setCount] = useState(0);
-  const [reload, setReload] = useState(true);
 
   
  
@@ -41,7 +40,8 @@ export default function tasks() {
       }
     };
     fetchData();
-  }, []);
+    refresh(0);
+  }, [reload]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -53,7 +53,6 @@ export default function tasks() {
         console.error("Error fetching user:", error);
       }
     };
-
     fetchData();
   }, []);
 
@@ -137,11 +136,14 @@ export default function tasks() {
   }
   const handleTaskBack = () =>{
     sideDefault.current.className="side-container";
-    setSelectedTask('');
+
   }
   const handleExpantion = (taskID) =>{
     setExpandedTaskId((prevTaskId) => (prevTaskId === taskID ? null : taskID));
   }
+  const handleDeleteTask = (taskID) => {
+    setListOfCards(prevTasks => prevTasks.filter(listOfCards => listOfCards.taskID !== taskID));
+  };
 
   return (
     <div id="tasks-tab" className='tasks-tab'>
@@ -169,7 +171,7 @@ export default function tasks() {
         <span className='side-text' ref={userWelcome}></span>
       </div>
 
-      <SideTask selectedTask={selectedTask} setSelectedTask={setSelectedTask} handleTaskBack={handleTaskBack} count={count} setCount={setCount} setReload={setReload}></SideTask>
+      <SideTask selectedTask={selectedTask} setSelectedTask={setSelectedTask} handleTaskBack={handleTaskBack} count={count} setCount={setCount} handleDeleteTask={handleDeleteTask} ></SideTask>
       
       <div className='tasks-container'>
         

@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from 'react'
 import axios from "axios";
 import toast, { Toaster } from 'react-hot-toast';
 import "./sideTask.css"
-export default function sideTask({selectedTask, setSelectedTask , handleTaskBack, count, setCount, setReload}) {
+export default function sideTask({selectedTask, setSelectedTask , handleTaskBack, count, setCount, handleDeleteTask}) {
   let sideError = useRef(null);
   let sideTask = useRef(null);
   
@@ -40,8 +40,6 @@ export default function sideTask({selectedTask, setSelectedTask , handleTaskBack
       setdate(selectedTask.dueDate);
       sethour(selectedTask.dueTime);
       setupdatedAT(currentDate);
-    }else{
-      setSelectedTask('')
     }
   },[count])
 
@@ -82,26 +80,30 @@ export default function sideTask({selectedTask, setSelectedTask , handleTaskBack
     
   }
   const handleDelete = () =>{
+    const toastId = toast.loading('Deleting...');
     const data= {
       taskID: sidetaskID
     }
-
-    if(confirm("Estas a punto de borrar esta tarea. \nEsta seguro de esto?")){
-      try{
+    if(confirm("You are about to delete this task completly. \n Are you sure?")){
+      try{ 
         axios.post("http://localhost:3001/card/deleteCard",data).then((response)=>{
           if(response.data === "incorrect"){
-            sideError.current.innerHTML="Something went wrong. <br>Please try again later."
+            toast.error("Something went wrong. Try again later",{
+              id: toastId,
+            })
           }else{
-            sideError.current.innerHTML="";
-            window.location.reload();
+            handleBack();
+            handleTaskBack();
+            handleDeleteTask(sidetaskID);
+            toast.success('Deleted successfully', {
+            id: toastId,
+          });
           }
+          
         })
       }catch (error) {
         console.error("Error updating:", error);
       }
-    }
-    else{
-
     }
   }
 

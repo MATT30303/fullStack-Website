@@ -85,7 +85,7 @@ router.post("/userCard", async (req, res) => {
     });
     if (!result[0]) res.json("incorrect");
     else {
-      res.json(result[0]);
+      res.json(result);
     }
   } catch (e) {
     console.error(e);

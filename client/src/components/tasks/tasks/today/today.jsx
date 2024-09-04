@@ -35,8 +35,11 @@ export default function TodayTasks({ todaysTasks, checkHandler, handleArrowClick
             </label>
           </div>
           <div className="task-info" onClick={(e) => {handleExpantion(value.taskID); e.stopPropagation()}}>
-            <div className='tasks-title'>{value.title}</div>
-            <div className='tasks-description'>{value.description} <br/><br/> {value.dueTime}</div>
+            <div className='tasks-title'>
+              <span className="card-title">{value.title}</span>  
+              <span className="card-hour">{value.dueTime.slice(0,5)}</span>  
+            </div>
+            <div className='tasks-description'>{value.description}</div>
           </div>
           <div>
             <img
