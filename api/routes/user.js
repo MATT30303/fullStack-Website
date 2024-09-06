@@ -72,7 +72,7 @@ router.post("/userCard", async (req, res) => {
     const { userID } = req.body;
 
     if (!userID) {
-      return res.json("empty");
+      return res.json("incorrect");
     }
 
     const query = `
@@ -87,6 +87,27 @@ router.post("/userCard", async (req, res) => {
     else {
       res.json(result);
     }
+  } catch (e) {
+    console.error(e);
+  }
+});
+
+router.post("/userPic", async (req, res) => {
+  try {
+    const { userID, pic } = req.body;
+
+    if (!userID || !pic) return res.json("incorrect");
+    const query = `
+    update users
+    set pic = :pic
+    where userID = :userID
+    `;
+    await sequelize.query(query, {
+      replacements: { pic, userID },
+      type: sequelize.QueryTypes.UPDATE,
+    });
+
+    res.json("correct");
   } catch (e) {
     console.error(e);
   }

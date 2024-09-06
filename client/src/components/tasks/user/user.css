@@ -52,6 +52,16 @@ html{
     position: absolute;
     padding: 1rem 0 0 0;
 }
+.selected-pfp{
+    width: 30vw;
+    height: 30vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: -2rem 0 0 0;
+    transition: margin .3s ease-in-out;
+}
+
 .user-pic{
     background-color: transparent;
     width: 25vw;
@@ -60,6 +70,71 @@ html{
     margin: 0 0 0 25vw;
     display: flex;
     justify-content: center;
+    .user-pfp{
+        display: inline;
+        opacity: 0;
+        transition-property: display opacity;
+        transition-duration: 1s;
+        transition-behavior: allow-discrete;
+
+        position: absolute;
+        height: 30vh;
+        width: 25vw;
+        bottom: 10vh;
+        right: 0;
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        grid-gap: 1rem;
+
+        animation: .4s ease-in-out forwards pfp-show;
+    }
+}
+.user-pic-none{
+    background-color: transparent;
+    width: 25vw;
+    height: 70vh;
+    position: absolute;
+    margin: 0 0 0 25vw;
+    display: flex;
+    justify-content: center;
+
+    .selected-pfp{
+        margin: 1rem 0 0 0;
+    }
+    .user-pfp{
+        display: none;
+        opacity: 0;
+        transition-property: display opacity;
+        transition-duration: .2s;
+        transition-behavior: allow-discrete;
+        z-index: 2;
+        position: absolute;
+        height: 30vh;
+        width: 25vw;
+        bottom: 10vh;
+        right: 0;
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        grid-gap: 1rem;
+
+        animation: .2s ease-in-out forwards pfp-hide;
+    }
+}
+@keyframes pfp-show {
+    0%{
+        opacity: 0;
+    }
+    100%{
+        opacity: 1;
+    }
+}
+@keyframes pfp-hide {
+    0%{
+        opacity: 1;
+    }
+    100%{
+        opacity: 0;
+    }
 }
 .profile-pic{
     height: 20vh;
@@ -72,11 +147,23 @@ html{
     border: none;
     border-radius: 50%;
     padding: .8rem;
-    width: 1.5vw;
     position: absolute;
     margin: 10rem 0 0 10rem;
     box-shadow: .2rem .2rem .2rem -.1rem var(--gray-picker);
     cursor: pointer;
+    transition: box-shadow .2s ease-in-out, background-color .2s ease-in-out;
+}
+.select-pic:hover{
+    box-shadow: none;
+    background-color: var(--accent-purple-light);    
+    .select-image{
+        width: 1.5vw;
+        filter: invert(12%) sepia(6%) saturate(551%) hue-rotate(202deg) brightness(0%) contrast(100%);
+        transition: filter .2s ease-in-out;
+    }
+}
+.select-image{
+    width: 1.5vw;
 }
 .user-pfp{
     position: absolute;
@@ -87,6 +174,7 @@ html{
     display: grid;
     grid-template-columns: repeat(4, 1fr);
     grid-gap: 1rem;
+    z-index: 5;
 }
 .pfp{
     width: 5rem;
@@ -100,6 +188,7 @@ html{
     justify-content: center;
     gap: 4rem;
     margin: 0 0 0 5%;
+    z-index: 5;
 }
 .user-username, .user-email, .user-password, .user-firstName, .user-lastName{
     width: 12vw;
@@ -148,9 +237,11 @@ html{
     width: 50vw;
     height: 70vh;
     position: absolute;
+    z-index: 0;
 }
 .button-save{
     position: absolute;
+    z-index: 2;
     right: 0;
     bottom: 0;
     border: none;

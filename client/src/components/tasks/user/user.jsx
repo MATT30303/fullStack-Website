@@ -27,6 +27,11 @@ export default function user() {
   const [userfirstName, setUserfirstName] = useState('');
   const [userlastName, setUserlastName] = useState('');
   const [userUpdated, setUserUpdated] = useState('');
+  const [profile, setProfile] = useState(0);
+
+  const [count, setCount] = useState(0);
+  const pfp = useRef(null);
+  const profilePic = useRef(null);
 
   const pic = [
     image1,
@@ -54,7 +59,8 @@ export default function user() {
       }
     };
     fetchData();
-  },[])
+    setProfile(user.pic);
+  },[]);
 
   useEffect(()=>{
     setUserUsername(user.username);
@@ -63,8 +69,53 @@ export default function user() {
     setUserConfirmPassword(user.pasword);
     setUserfirstName(user.firstName);
     setUserlastName(user.lastName);
-  },[user])
+  },[user]);
 
+  useEffect(()=>{
+    profilePic.current.src = pic[profile];
+  },[profile])
+ 
+ 
+  const showpfp = () =>{
+    if(count == 0){
+      pfp.current.className="user-pic";
+      setCount(1);
+    }
+    else{
+      pfp.current.className="user-pic-none";
+      updatePic();
+      setCount(0);
+    }
+  }
+
+  const updatePic = () =>{
+
+    const data = {
+      userID: user.userID,
+      pic: profile
+    }
+    
+    const toastId = toast.loading('Updating...');
+    try{
+      axios.post("http://localhost:3001/user/userPic",data).then((response)=>{
+        if(response.data === "incorrect"){
+          toast.error("Something went wrong. Try again later",{
+            id: toastId,
+          })
+        }else{
+          toast.success('Updated successfully', {
+            id: toastId,
+          });
+        }
+      })
+    }catch (error) {
+      toast.error("Something went wrong. Try again later",{
+        id: toastId,
+      })
+    }
+  }
+ 
+  
 
   return (
     <div className="user-tab" id='user-tab'>
@@ -92,12 +143,18 @@ export default function user() {
           
           <div className="user-title">PROFILE</div>
           
-          <div className='user-pic'>
-            <img src={pic[user.pic]} alt="" className='profile-pic'/>
-            <img src={picture} alt=""className='select-pic' />
+          <div className='user-pic-none'ref={pfp} >
+            
+            <div className='selected-pfp'>
+              <img src={pic[user.pic]} alt="" ref={profilePic} className='profile-pic'/>
+              <div className='select-pic' onClick={showpfp}>
+              <img src={picture} alt=""className='select-image' />
+              </div>
+            </div>
+
             <div className='user-pfp'>
               {pic.map((pic, index) => (
-                <img src={pic} key={index} className='pfp' alt={`Profile ${index}`} />
+                <img src={pic} key={index} id={index} className='pfp' alt={`Profile ${index}`} onClick={(e)=>{ setProfile(e.target.id) }}  />
               ))}
             </div>
 
