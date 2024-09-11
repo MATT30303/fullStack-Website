@@ -92,24 +92,86 @@ router.post("/userCard", async (req, res) => {
   }
 });
 
-router.post("/userPic", async (req, res) => {
+router.post("/userData", async (req, res) => {
   try {
-    const { userID, pic } = req.body;
+    const { email, password } = req.body;
 
-    if (!userID || !pic) return res.json("incorrect");
+    if (!email || !password) {
+      return res.json("incorrect");
+    }
+
     const query = `
-    update users
-    set pic = :pic
-    where userID = :userID
-    `;
-    await sequelize.query(query, {
-      replacements: { pic, userID },
-      type: sequelize.QueryTypes.UPDATE,
+    SELECT email, password
+    from users 
+    where email = :email`;
+    const result = await sequelize.query(query, {
+      replacements: { email },
+      type: sequelize.QueryTypes.SELECT,
     });
-
-    res.json("correct");
+    if (!result[0]) res.json("incorrect");
+    bcrypt.compare(password, result[0].password).then((match) => {
+      if (!match) {
+        res.json("incorrect");
+      } else {
+        res.json("correct");
+      }
+    });
   } catch (e) {
     console.error(e);
   }
 });
+router.post("/userPassword", async (req, res) => {
+  try {
+    const { password, userID } = req.body;
+
+    if (!password || !userID) {
+      return res.json("error");
+    }
+
+    const query = `
+    SELECT password
+    from users 
+    where userID = userID`;
+    const result = await sequelize.query(query, {
+      replacements: { userID },
+      type: sequelize.QueryTypes.SELECT,
+    });
+    if (!result[0]) res.json("incorrect");
+    bcrypt.compare(password, result[0].password).then((match) => {
+      if (!match) {
+        res.json("incorrect");
+      } else {
+        res.json("correct");
+      }
+    });
+  } catch (e) {
+    console.error(e);
+  }
+});
+router.post("/passUpdate", async (req, res) => {
+  try {
+    const { userID, password } = req.body;
+
+    if (!userID || !password) {
+      return res.status(400).json("error");
+    }
+
+    bcrypt.hash(password, 10).then((hash) => {
+      const query = `
+        update users
+        set password :hash
+        where userID = :userID
+        `;
+      sequelize.query(query, {
+        replacements: { hash, userID },
+        type: sequelize.QueryTypes.INSERT,
+      });
+    });
+    res.json("correct");
+  } catch (e) {
+    console.error(e);
+    res.status(500).send(e.message);
+  }
+});
+
 export default router;

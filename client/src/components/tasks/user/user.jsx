@@ -1,7 +1,8 @@
-import React, { useEffect, useRef, useState } from 'react'
-import axios from "axios"
+import React, { useEffect, useRef, useState } from 'react';
+import axios from "axios";
 import toast, { Toaster } from 'react-hot-toast';
-import "./user.css"
+import "./user.css";
+import Password from "./password/password"
 
 import picture from "../../../assets/images/picture_icon.png";
 import image1 from "../../../assets/profile_fotos/pf_default.png"
@@ -16,22 +17,25 @@ import image9 from "../../../assets/profile_fotos/pf_loquito.png"
 import image10 from "../../../assets/profile_fotos/pf_que.png"
 import image11 from "../../../assets/profile_fotos/pf_quelepasaba.png"
 import image12 from "../../../assets/profile_fotos/pf_zarpade.png"
+import avatar from "../../../assets/profile_fotos/pf_avatar.png"
 
 export default function user() {
   const [user, setUser] = useState([]);
 
   const [userUsername, setUserUsername] = useState('');
   const [userEmail, setUserEmail] = useState('');
-  const [userpassword, setUserpassword] = useState('');
-  const [userConfirmPassword, setUserConfirmPassword] = useState('');
   const [userfirstName, setUserfirstName] = useState('');
   const [userlastName, setUserlastName] = useState('');
   const [userUpdated, setUserUpdated] = useState('');
   const [profile, setProfile] = useState(0);
 
   const [count, setCount] = useState(0);
+  const [reload, setReload] = useState(0);
   const pfp = useRef(null);
   const profilePic = useRef(null);
+  const uploadPic = useRef(null);
+
+  let userBlock = useRef(null);
 
   const pic = [
     image1,
@@ -59,16 +63,14 @@ export default function user() {
       }
     };
     fetchData();
-    setProfile(user.pic);
-  },[]);
+  },[reload]);
 
   useEffect(()=>{
     setUserUsername(user.username);
     setUserEmail(user.email);
-    setUserpassword(user.password);
-    setUserConfirmPassword(user.pasword);
     setUserfirstName(user.firstName);
     setUserlastName(user.lastName);
+    setProfile(user.pic);
   },[user]);
 
   useEffect(()=>{
@@ -79,30 +81,37 @@ export default function user() {
   const showpfp = () =>{
     if(count == 0){
       pfp.current.className="user-pic";
+      uploadPic.current.className="select-pic";
       setCount(1);
     }
     else{
       pfp.current.className="user-pic-none";
-      updatePic();
+      uploadPic.current.className="select-pic-none";
       setCount(0);
     }
   }
-
-  const updatePic = () =>{
-
+  
+ 
+  const save = () =>{
+    let currentDate = new Date().toJSON().slice(0, 10);
     const data = {
-      userID: user.userID,
-      pic: profile
+      username: userUsername,
+      email: userEmail,
+      updatedAt: currentDate,
+      firstName: userfirstName,
+      lastName: userlastName,
+      pic: profile,
+      userID: 1
     }
-    
     const toastId = toast.loading('Updating...');
     try{
-      axios.post("http://localhost:3001/user/userPic",data).then((response)=>{
+      axios.post("http://localhost:3001/user/userUpdate",data).then((response)=>{
         if(response.data === "incorrect"){
           toast.error("Something went wrong. Try again later",{
             id: toastId,
           })
         }else{
+
           toast.success('Updated successfully', {
             id: toastId,
           });
@@ -113,8 +122,16 @@ export default function user() {
         id: toastId,
       })
     }
+
   }
- 
+
+
+  const pass = () =>{
+    if(userBlock.current.className == "user-container" ) userBlock.current.className="user-container-pass";
+    else userBlock.current.className="user-container"; 
+  }
+
+
   
 
   return (
@@ -139,16 +156,18 @@ export default function user() {
       /></div>
 
 
-        <div className="user-container">
+        <div className="user-container-pass" ref={userBlock}>
           
           <div className="user-title">PROFILE</div>
           
           <div className='user-pic-none'ref={pfp} >
             
             <div className='selected-pfp'>
-              <img src={pic[user.pic]} alt="" ref={profilePic} className='profile-pic'/>
-              <div className='select-pic' onClick={showpfp}>
-              <img src={picture} alt=""className='select-image' />
+              <img src={pic[user.pic]} alt="" ref={profilePic} className='profile-pic'onClick={showpfp}/>
+              <img src={avatar} alt="" className='profile-pic' id='avatar' onClick={showpfp}/>
+                
+              <div className='select-pic-none' ref={uploadPic} >
+                <img src={picture} alt=""  className='select-image' />
               </div>
             </div>
 
@@ -161,40 +180,47 @@ export default function user() {
           
           </div>
 
-
-
-          <div className='user-date'>
-            <span className='date-span'>account creation date: {user.createdAt || "undefined"}</span>
-          </div>
-
-          <div className='user-button'>
-            <button className='button-save'>SAVE</button>
-          </div>
+              <Password></Password>
+          
 
           <div className="user-data">
+
             <div className="user-username">
               <span className='username-span'>USER NAME</span>
-              <input type="text" className='username-input'/>
+              <input type="text" className='username-input' defaultValue={user.username || ""} onChange={(e)=>{setUserUsername(e.target.value)}}/>
             </div>
+            
             <div className="user-email">
             <span className='email-span'>E-MAIL</span>
-            <input type="email" className='email-input'/>
+            <input type="email" className='email-input' defaultValue={user.email || ""} onChange={(e)=>{setUserEmail(e.target.value)}}/>
             </div>
-            <div className="user-password">
-            <span className='password-span'>PASSWORD</span>
-            <input type="password" className='password-input'/>
-            </div>
+            
             <div className="user-firstName">
             <span className='firstName-span'>FIRST NAME</span>
-            <input type="text" className='firstName-input'/>
+            <input type="text" className='firstName-input'defaultValue={user.firstName || ""} onChange={(e)=>{setUserfirstName(e.target.value)}}/>
             </div>
+            
             <div className="user-lastName">
             <span className='lastName-span'>LAST NAME</span>
-            <input type="text" className='lastName-input'/>
+            <input type="text" className='lastName-input'defaultValue={user.lastName || ""} onChange={(e)=>{setUserlastName(e.target.value)}}/>
             </div>
-          </div>
 
+            
+            <div className='user-date'>
+              <span className='date-span'>account creation date: {user.createdAt || "undefined"}</span>
+            </div>
+
+            <div className="user-button">
+              <button className='button-save' onClick={save}>SAVE</button>
+            </div>
+
+            <div className="user-password">
+              <button className='password-button' onClick={pass}>CHANGE PASSWORD</button>
+            </div>
+            
           
+          </div>
+            
           
         </div>
     </div>

@@ -42,7 +42,9 @@ html{
     height: 70vh;
     border: none;
     border-radius: 2rem;
+    margin: none;
     box-shadow: .2rem .2rem .2rem var(--accent-pink);
+    transition: margin .4s ease-in-out;
 }
 .user-title{
     color: var(--white-offWhite);
@@ -123,34 +125,53 @@ html{
 @keyframes pfp-show {
     0%{
         opacity: 0;
+        z-index: -1;
     }
     100%{
         opacity: 1;
+        z-index: 2;
     }
 }
 @keyframes pfp-hide {
     0%{
         opacity: 1;
+        z-index: 2;
     }
     100%{
         opacity: 0;
+        z-index: -1;
     }
 }
 .profile-pic{
     height: 20vh;
     padding: 2rem 0 0 0;
     z-index: 2;
+    cursor: pointer;
+    transition: opacity .2s ease-in-out;
+}
+.profile-pic:hover{
+    opacity: .1;
+}
+#avatar{
+    position: absolute;
+    z-index: 1;
 }
 .select-pic{
-    z-index: 2;
+    z-index: 5;
     background-color: var(--black-picker);
     border: none;
     border-radius: 50%;
-    padding: .8rem;
+    padding: .6rem;
     position: absolute;
     margin: 10rem 0 0 10rem;
     box-shadow: .2rem .2rem .2rem -.1rem var(--gray-picker);
     cursor: pointer;
+    display: inline;
+    opacity: 1;
+    transition-property: display opacity;
+    transition-duration: .2s;
+    transition-behavior: allow-discrete;
+    animation: .2s ease-in-out forwards pfp-show;
     transition: box-shadow .2s ease-in-out, background-color .2s ease-in-out;
 }
 .select-pic:hover{
@@ -162,8 +183,18 @@ html{
         transition: filter .2s ease-in-out;
     }
 }
+.select-pic-none{
+    z-index: 2;
+    display: none;
+    opacity: 0;
+    transition-property: display opacity;
+    transition-duration: 0s;
+    transition-behavior: allow-discrete;
+    animation: .2s ease-in-out forwards pfp-hide;
+}
 .select-image{
     width: 1.5vw;
+    z-index: 2;
 }
 .user-pfp{
     position: absolute;
@@ -178,9 +209,10 @@ html{
 }
 .pfp{
     width: 5rem;
+    cursor: pointer;
 }
 .user-data{
-    width: 50%;
+    width: 15vw;
     height: 100%;
     display: flex;
     flex-direction: column;
@@ -196,7 +228,7 @@ html{
     display: flex;
     flex-direction: column;
 }
-.username-span, .email-span, .password-span, .firstName-span, .lastName-span{
+.username-span, .email-span, .firstName-span, .lastName-span{
     color: var(--gray-picker-light);
     font-size: .9rem;
     letter-spacing: .1rem;
@@ -212,8 +244,20 @@ html{
     padding: .5rem 0 0 0;
     transition: border-bottom .2s ease-in-out;
 }
-.password-input{
-    letter-spacing: .3rem;
+.password-button{
+    border: none;
+    border-radius: .5rem;
+    height: 5vh;
+    background-color: rgba(243,58,106,.8);
+    box-shadow: .2rem .2rem .2rem 0 var(--black-default);
+    letter-spacing: 1px;
+    color: var(--white-offWhite);
+    font-size: .9rem;
+    transition: translate .1s ease-in-out, background-color .2s ease-in-out;
+}
+.password-button:hover{
+    background-color: rgba(243,58,106,1);
+    translate: 0 -.1rem;
 }
 .username-input:focus, .email-input:focus, .password-input:focus, .firstName-input:focus, .lastName-input:focus{
     outline: none;
@@ -221,27 +265,31 @@ html{
 }
 
 .user-date{
-    width: 50vw;
-    height: 70vh;
+    width: 15vw;
+    height: 18vh;
     position: absolute;
+    bottom: 0;
+    z-index: 1;
 }
 .date-span{
     position: absolute;
-    bottom: 0;
+    z-index: 1;
+    top: 0;
     left: 0;
+    text-align: start;
     color: var(--gray-picker-dark);
     font-size: .9rem;
-    padding: 0 0 .3rem 5%;
+    cursor: default;
 }
 .user-button{
-    width: 50vw;
-    height: 70vh;
     position: absolute;
+    bottom: 0;
+    height: 25vh;
+    margin: 0 0 0 35vw;
     z-index: 0;
 }
 .button-save{
-    position: absolute;
-    z-index: 2;
+    z-index: 5;
     right: 0;
     bottom: 0;
     border: none;
@@ -262,4 +310,101 @@ html{
 .button-save:hover{
     translate: 0 -.1rem;
     background-color: rgba(255,182,193,1);
+}
+
+.user-container-pass{
+    background-color: var(--black-pickerLight);
+    width: 50vw;
+    height: 70vh;
+    border: none;
+    border-radius: 2rem;
+    box-shadow: .2rem .2rem .2rem var(--accent-pink);
+    margin: 0 20% 0 0;
+    .changePass{
+        width: 25%;
+        height: 70vh;
+        border: none;
+        border-radius: 2rem;
+        display: flex;
+        flex-direction: column;
+        gap: 8rem;
+        
+        background-color: var(--black-pickerLight);
+        box-shadow: .2rem .2rem .2rem var(--accent-pink);
+        position: absolute;
+        right: 5%;
+    }
+    transition: margin .4s ease-in-out;
+}
+.changePass{
+    width: 25%;
+    height: 70vh;
+    border: none;
+    border-radius: 2rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8rem;
+    
+    background-color: var(--black-pickerLight);
+    box-shadow: .2rem .2rem .2rem var(--accent-pink);
+    position: absolute;
+    right: -25vw;
+    transition: right .4s ease-in-out;
+}
+.pass-title{
+    color: var(--white-offWhite);
+    font-size: 2rem;
+    text-align: center;
+    padding: 1rem 0 0 0;
+
+}
+.pass-data{
+    height: 80%;
+    width: 15vw;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 3rem;
+    padding:  0 0 0 3rem;
+}
+
+.pass-old, .pass-new, .pass-confirm{
+    display: flex;
+    flex-direction: column;
+    gap: .5rem;
+}
+.pass-old-span, .pass-new-span, .pass-confirm-span{
+    color: var(--gray-picker-light);
+    font-size: 1rem;
+}
+.pass-old-box, .pass-new-box, .pass-confirm-box{
+    border: none;
+    background-color: transparent;
+    border-bottom: .125rem solid var(--gray-picker);
+    color: var(--white-offWhite);
+    font-size: 1.2rem;
+    padding: .5rem 0 0 0;
+    transition: border-bottom .2s ease-in-out;
+}
+.pass-old-box:focus, .pass-new-box:focus, .pass-confirm-box:focus{
+    outline: none;
+    border-bottom: .125rem solid var(--accent-pink);
+}
+.pass-button{
+    border: none;
+    border-radius: .5rem;
+    height: 5vh;
+    width: 10vw;
+    background-color: rgba(243,58,106,.8);
+    box-shadow: .2rem .2rem .2rem var(--black-default);
+    color: var(--white-offWhite);
+    letter-spacing: 1px;
+    font-size: 1rem;
+    margin: 2rem 0 0 0;
+    transition: translate .1s ease-in-out, background-color .2s ease-in-out;
+}
+.pass-button:hover{
+    translate: 0 -0.1rem;
+    background-color: rgba(243,58,106,1);
 }

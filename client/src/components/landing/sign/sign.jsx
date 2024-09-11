@@ -59,7 +59,7 @@ export default function Sign() {
   const handleSignSubmit = (event) => {
     event.preventDefault();
     const data = {email: signEmail, password: signPassword};
-    axios.post("http://localhost:3001/getUser", data).then((response)=>{
+    axios.post("http://localhost:3001/user/userData", data).then((response)=>{
       if(response.data === "incorrect"){
         handleSignError();
       }else{
