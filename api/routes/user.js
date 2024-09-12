@@ -23,7 +23,7 @@ router.post("/", async (req, res) => {
     const { username, password, email, firstName, lastName } = req.body;
 
     if (!username || !password || !email || !firstName || !lastName) {
-      return res.status(400).json("incorrect");
+      return res.status(400).json("error");
     }
 
     bcrypt.hash(password, 10).then((hash) => {
@@ -43,6 +43,7 @@ router.post("/", async (req, res) => {
     res.status(500).send(e.message);
   }
 });
+
 router.post("/check", async (req, res) => {
   try {
     const { email } = req.body;
@@ -67,12 +68,13 @@ router.post("/check", async (req, res) => {
     console.error(e);
   }
 });
+
 router.post("/userCard", async (req, res) => {
   try {
     const { userID } = req.body;
 
     if (!userID) {
-      return res.json("incorrect");
+      return res.json("error");
     }
 
     const query = `
@@ -97,7 +99,7 @@ router.post("/userData", async (req, res) => {
     const { email, password } = req.body;
 
     if (!email || !password) {
-      return res.json("incorrect");
+      return res.json("error");
     }
 
     const query = `
@@ -120,6 +122,33 @@ router.post("/userData", async (req, res) => {
     console.error(e);
   }
 });
+
+router.post("/userUpdate", async (req, res) => {
+  try {
+    const { username, email, updatedAt, firstName, lastName, pic, userID } = req.body;
+
+    if (!username || !email || !updatedAt || !firstName || !lastName || !pic || !userID) {
+      return res.status(400).json("error");
+    }
+
+    
+    const query = `
+      UPDATE users
+      SET username = :username, email = :email, updatedAt = :updatedAt, firstName = :firstName, lastName = :lastName, pic = :pic
+      WHERE userID = :userID
+    `;
+    sequelize.query(query, {
+      replacements: { username, email, updatedAt, firstName, lastName, pic, userID },
+      type: sequelize.QueryTypes.UPDATE,
+    });
+    res.json("correct");
+  } catch (e) {
+    console.error(e);
+    res.status(500).send(e.message);
+  }
+});
+
+
 router.post("/userPassword", async (req, res) => {
   try {
     const { password, userID } = req.body;
@@ -159,12 +188,12 @@ router.post("/passUpdate", async (req, res) => {
     bcrypt.hash(password, 10).then((hash) => {
       const query = `
         update users
-        set password :hash
+        set password = :hash
         where userID = :userID
         `;
       sequelize.query(query, {
         replacements: { hash, userID },
-        type: sequelize.QueryTypes.INSERT,
+        type: sequelize.QueryTypes.UPDATE,
       });
     });
     res.json("correct");

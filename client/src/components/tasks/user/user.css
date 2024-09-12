@@ -253,6 +253,7 @@ html{
     letter-spacing: 1px;
     color: var(--white-offWhite);
     font-size: .9rem;
+    cursor: pointer;
     transition: translate .1s ease-in-out, background-color .2s ease-in-out;
 }
 .password-button:hover{
@@ -385,12 +386,57 @@ html{
     color: var(--white-offWhite);
     font-size: 1.2rem;
     padding: .5rem 0 0 0;
+    letter-spacing: 2px;
     transition: border-bottom .2s ease-in-out;
 }
 .pass-old-box:focus, .pass-new-box:focus, .pass-confirm-box:focus{
     outline: none;
     border-bottom: .125rem solid var(--accent-pink);
 }
+.pass-old-box-error, .pass-new-box-error, .pass-confirm-box-error{
+    border: none;
+    background-color: transparent;
+    border-bottom: .125rem solid var(--accent-rose);
+    color: var(--white-offWhite);
+    font-size: 1.2rem;
+    padding: .5rem 0 0 0;
+    transition: border-bottom .2s ease-in-out;
+}
+.pass-eye{
+    width: 2rem;
+    position: absolute;
+    padding: 1.5rem 4rem 0 0;
+    right: 0;
+    cursor: pointer;
+    .eye-off-img{
+        display: none;
+        opacity: 0;
+        transition-property: display opacity;
+        transition-duration: .2s;
+        transition-behavior: allow-discrete;
+        animation: .2s ease-in-out forwards pfp-hide;
+    }
+}
+.pass-eye-off{
+    width: 2rem;
+    position: absolute;
+    padding: 1.5rem 4rem 0 0;
+    right: 0;
+    cursor: pointer;
+    .eye-off-img{
+        display: inline;
+        opacity: 1;
+        transition-property: display opacity;
+        transition-duration: .2s;
+        transition-behavior: allow-discrete;
+        animation: .2s ease-in-out forwards pfp-show;
+    }
+}
+.eye-img, .eye-off-img{
+    width: 2rem;
+    position: absolute;
+}
+
 .pass-button{
     border: none;
     border-radius: .5rem;
@@ -402,6 +448,7 @@ html{
     letter-spacing: 1px;
     font-size: 1rem;
     margin: 2rem 0 0 0;
+    cursor: pointer;
     transition: translate .1s ease-in-out, background-color .2s ease-in-out;
 }
 .pass-button:hover{

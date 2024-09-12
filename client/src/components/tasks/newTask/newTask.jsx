@@ -129,11 +129,11 @@ export default function newTask({reload, refresh}) {
           
           <label htmlFor="" className="newTask-desc">Description: <textarea name="description" id="description" className="newTask-desc-area" placeholder='- - -' value={desc || ""} onChange={(e)=>{setDesc(e.target.value)}}></textarea></label>
           <div className="newTask-error" ref={error} ></div>
+        </div>
           <div className="newTask-buttons">
             <a className="newTask-button" href="#">Back</a>
             <a className="newTask-button" href="#" onClick={create}>Create</a>
           </div>
-        </div>
     </div>
    </div>
   )

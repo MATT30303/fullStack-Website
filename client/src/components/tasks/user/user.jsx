@@ -106,12 +106,11 @@ export default function user() {
     const toastId = toast.loading('Updating...');
     try{
       axios.post("http://localhost:3001/user/userUpdate",data).then((response)=>{
-        if(response.data === "incorrect"){
+        if(response.data === "incorrect" || response.data === "error"){
           toast.error("Something went wrong. Try again later",{
             id: toastId,
           })
         }else{
-
           toast.success('Updated successfully', {
             id: toastId,
           });
@@ -124,7 +123,8 @@ export default function user() {
     }
 
   }
-
+  
+  
 
   const pass = () =>{
     if(userBlock.current.className == "user-container" ) userBlock.current.className="user-container-pass";
@@ -156,7 +156,7 @@ export default function user() {
       /></div>
 
 
-        <div className="user-container-pass" ref={userBlock}>
+        <div className="user-container" ref={userBlock}>
           
           <div className="user-title">PROFILE</div>
           
