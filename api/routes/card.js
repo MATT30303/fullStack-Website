@@ -1,6 +1,9 @@
 import express from "express";
 const router = express.Router();
 import db from "../models/index.js";
+import { SECRET } from "./config.js";
+import jwt from "jsonwebtoken";
+
 
 const { sequelize } = db;
 
@@ -19,9 +22,13 @@ router.get("/", async (req, res) => {
 
 router.post("/createCard", async (req, res) => {
   try {
-    const { userID, title, description, status, priority, category, dueDate, dueTime } = req.body;
+    const {title, description, status, priority, category, dueDate, dueTime } = req.body;
 
-    if (!userID || !title || !description || !status || !priority || !category || !dueDate) {
+    const token = req.cookies.access_token;
+    if(!token) res.status(401).json({message: "Token missing"});
+    const data = jwt.verify(token, SECRET);
+    const userID = data.userID;
+    if (!userID || !title || !description || !status || !priority || !category || !dueDate || !dueTime) {
       return res.status(400).json("incorrect");
     }
 
@@ -41,13 +48,13 @@ router.post("/createCard", async (req, res) => {
   }
 });
 
-router.post("/getcards", async (req, res) => {
-  try {
-    const { userID } = req.body;
-    if (!userID) {
-      return res.status(400).json("incorrect");
-    }
+router.post("/getCards", async (req, res) => {
 
+  try {
+    const token = req.cookies.access_token;
+    if (!token) return res.status(401).json({ message: "No token, authorization denied" });
+    const data = jwt.verify(token, SECRET)
+    const userID = data.userID;
     const query = `
     SELECT *
     from card
@@ -56,12 +63,12 @@ router.post("/getcards", async (req, res) => {
       replacements: { userID },
       type: sequelize.QueryTypes.SELECT,
     });
-
     res.json(result);
   } catch (e) {
     console.error(e);
     res.status(500).send(e.message);
   }
+  
 });
 
 router.post("/updateCard", async (req, res) => {

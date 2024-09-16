@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react'
+import { useRef, useState } from 'react'
 import axios from "axios"
 import toast, { Toaster } from 'react-hot-toast';
 import "../user.css"
@@ -7,8 +7,7 @@ import eye from '../../../../assets/images/eye.png';
 import eye_off from '../../../../assets/images/eye_off.png';
 
 
-export default function password() {
-    const [userpassword, setUserpassword] = useState('');
+export default function Password() {
     const [userConfirmPassword, setUserConfirmPassword] = useState('');
     const [userOld, setUserOld] = useState('');
     const [userNew, setUserNew] = useState('');
@@ -43,10 +42,11 @@ export default function password() {
         else{
           const data = {
             password: userOld,
-            userID: 1
           }
           try{
-            axios.post("http://localhost:3001/user/userPassword",data).then((response)=>{
+            axios.post("http://localhost:3001/user/userPassword",data,{
+              withCredentials: true
+            }).then((response)=>{
               if(response.data === "incorrect"){
                 toast.error("Old password is incorrect",{
                   id: toastId,
@@ -67,11 +67,12 @@ export default function password() {
     const updatePass = (toastId)=>{
       console.log("entro");
       const data = {
-        password: userOld,
-        userID: 1
+        password: userNew
       }
       try{
-        axios.post("http://localhost:3001/user/passUpdate",data).then((response)=>{
+        axios.post("http://localhost:3001/user/passUpdate",data,{
+          withCredentials: true
+        }).then((response)=>{
           if(response.data === "incorrect"){
             toast.error("Something went Wrong. Try again later.",{
               id: toastId,
@@ -158,8 +159,8 @@ export default function password() {
                 <span className='pass-old-span'>OLD PASSWORD</span>
                 <input type="password" className='pass-old-box' ref={oldBox} onChange={(e)=>{setUserOld(e.target.value)}} onClick={borderFix} />
                 <div className='pass-eye' ref={box1} >
-                  <img src={eye} alt="" className='eye-img' onClick={(e)=>{visible(1)}}/>
-                  <img src={eye_off} alt="" className='eye-off-img' onClick={(e)=>{invisible(1)}}/>
+                  <img src={eye} alt="" className='eye-img' onClick={()=>{visible(1)}}/>
+                  <img src={eye_off} alt="" className='eye-off-img' onClick={()=>{invisible(1)}}/>
                 </div>
               </div>
 
@@ -167,8 +168,8 @@ export default function password() {
                 <span className="pass-new-span">NEW PASSWORD</span>
                 <input type="password" className='pass-new-box' ref={newBox} onChange={(e)=>{setUserNew(e.target.value)}} onClick={borderFix} />
                 <div className='pass-eye' ref={box2} >
-                  <img src={eye} alt="" className='eye-img' onClick={(e)=>{visible(2)}}/>
-                  <img src={eye_off} alt="" className='eye-off-img' onClick={(e)=>{invisible(2)}}/>
+                  <img src={eye} alt="" className='eye-img' onClick={()=>{visible(2)}}/>
+                  <img src={eye_off} alt="" className='eye-off-img' onClick={()=>{invisible(2)}}/>
                 </div>
               </div>
               
@@ -176,8 +177,8 @@ export default function password() {
                 <span className="pass-confirm-span">CONFIRM PASSWORD</span>
                 <input type="password" className='pass-confirm-box' ref={confBox} onChange={(e)=>{setUserConfirmPassword(e.target.value)}} onClick={borderFix}/>
                 <div className='pass-eye' ref={box3} >
-                  <img src={eye} alt="" className='eye-img' onClick={(e)=>{visible(3)}}/>
-                  <img src={eye_off} alt="" className='eye-off-img'onClick={(e)=>{invisible(3)}}/>
+                  <img src={eye} alt="" className='eye-img' onClick={()=>{visible(3)}}/>
+                  <img src={eye_off} alt="" className='eye-off-img'onClick={()=>{invisible(3)}}/>
                 </div>
               </div>
 

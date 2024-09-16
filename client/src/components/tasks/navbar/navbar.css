@@ -61,11 +61,95 @@ html{
 }
 .icon{
     width: 2.5rem;
+    cursor: pointer;
     animation: .2s ease-out forwards bright-ani2;
 }
 .icon:hover{
     animation: .2s ease-out forwards bright-ani;
 }
+.logout{
+    position: absolute;
+    bottom: 1vh;
+    left: 2vw;
+    cursor: pointer;
+}
+.logout-tab-show{
+    z-index: 2;
+    position: absolute;
+    width: 100vw;
+    height: 100vh;
+    opacity: 1;
+    transition-property: display opacity;
+    transition-duration: .2s;
+    transition-behavior: allow-discrete;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    backdrop-filter: blur(2px);
+    animation: .2s ease-in-out forwards desc-show;
+}
+.logout-tab-none{
+    z-index: 2;
+    position: absolute;
+    width: 100vw;
+    height: 100vh;
+    display: none;
+    opacity: 0;
+    transition-property: display opacity;
+    transition-duration: .2s;
+    transition-behavior: allow-discrete;
+    justify-content: center;
+    align-items: center;
+    backdrop-filter: blur(1px);
+    animation: .2s ease-in-out forwards desc-hide;
+}
+@keyframes desc-show {
+    0%{
+        opacity: 0;
+    }
+    100%{
+        opacity: 1;
+    }
+}
+@keyframes desc-hide {
+    0%{
+        opacity: 1;
+    }
+    100%{
+        opacity: 0;
+    }
+}
+.logout-box{
+    background-color: var(--black-pickerLight);
+    box-shadow: .2rem .2rem .2rem var(--accent-pink);
+    padding: 2rem 2rem;
+    border: none;
+    border-radius: 1rem;
+}
+.logout-span{
+    color: var(--white-offWhite);
+    font-size: 1.2rem;
+}
+.logout-buttons{
+    display: flex;
+    padding: 2rem 0 0 0;
+    justify-content: space-between;
+}
+.button{
+    padding: .5rem 1rem;
+    border: none;
+    border-radius: .5rem;
+    background-color: var(--accent-pink);
+    box-shadow: .2rem .2rem .2rem var(--black-default);
+    font-size: 1rem;
+    cursor: pointer;
+    transition: translate .1s ease-in-out;
+}
+.button:hover{
+    translate: 0 -.1rem;
+
+}
+
 @keyframes bright-ani {
     0%{
         filter: invert(75%) sepia(76%) saturate(4975%) hue-rotate(270deg) brightness(500%) contrast(99%)

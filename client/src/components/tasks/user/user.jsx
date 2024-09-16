@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import axios from "axios";
 import toast, { Toaster } from 'react-hot-toast';
 import "./user.css";
@@ -19,21 +19,20 @@ import image11 from "../../../assets/profile_fotos/pf_quelepasaba.png"
 import image12 from "../../../assets/profile_fotos/pf_zarpade.png"
 import avatar from "../../../assets/profile_fotos/pf_avatar.png"
 
-export default function user() {
+export default function User() {
   const [user, setUser] = useState([]);
 
   const [userUsername, setUserUsername] = useState('');
   const [userEmail, setUserEmail] = useState('');
   const [userfirstName, setUserfirstName] = useState('');
   const [userlastName, setUserlastName] = useState('');
-  const [userUpdated, setUserUpdated] = useState('');
   const [profile, setProfile] = useState(0);
 
   const [count, setCount] = useState(0);
-  const [reload, setReload] = useState(0);
   const pfp = useRef(null);
   const profilePic = useRef(null);
   const uploadPic = useRef(null);
+
 
   let userBlock = useRef(null);
 
@@ -55,15 +54,19 @@ export default function user() {
   useEffect(()=>{
     const fetchData = async () => {
       try {
-        const data = { userID: 1 };
-        const response = await axios.post("http://localhost:3001/user/userCard", data);
+        const response = await axios.post("http://localhost:3001/user/userCard",{},{
+          withCredentials: true
+        });
         setUser(response.data[0]);
       } catch (error) {
         console.error("Error fetching cards:", error);
       }
     };
     fetchData();
-  },[reload]);
+  },[]);
+
+
+
 
   useEffect(()=>{
     setUserUsername(user.username);
@@ -101,11 +104,12 @@ export default function user() {
       firstName: userfirstName,
       lastName: userlastName,
       pic: profile,
-      userID: 1
     }
     const toastId = toast.loading('Updating...');
     try{
-      axios.post("http://localhost:3001/user/userUpdate",data).then((response)=>{
+      axios.post("http://localhost:3001/user/userUpdate",data, {
+        withCredentials: true
+      }).then((response)=>{
         if(response.data === "incorrect" || response.data === "error"){
           toast.error("Something went wrong. Try again later",{
             id: toastId,

@@ -2,6 +2,8 @@ import express from "express";
 const router = express.Router();
 import db from "../models/index.js";
 import bcrypt, { hash } from "bcrypt";
+import jwt from "jsonwebtoken";
+import { SECRET } from "./config.js";
 
 const { sequelize } = db;
 
@@ -71,12 +73,10 @@ router.post("/check", async (req, res) => {
 
 router.post("/userCard", async (req, res) => {
   try {
-    const { userID } = req.body;
-
-    if (!userID) {
-      return res.json("error");
-    }
-
+    const token = req.cookies.access_token;
+    if(!token) res.status(401).json({message: "Token missing"});
+    const data = jwt.verify(token, SECRET);
+    const userID = data.userID;
     const query = `
     SELECT *
     from users 
@@ -94,16 +94,39 @@ router.post("/userCard", async (req, res) => {
   }
 });
 
+router.post("/userCookie", async (req, res) => {
+  try {
+    const token = req.cookies.access_token;
+    if (!token){ 
+     res.json("unauthorized");
+    }
+    else{
+      res.json("authorized");    
+    }
+  } catch (e) {
+    console.error(e);
+  }
+});
+router.post("/logout", (req, res) => {
+  res.cookie('access_token', '', {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === 'production',
+    sameSite: 'lax',
+    expires: new Date(0)  // Set expiration date to a past time
+  }).json({ message: "Logged out successfully" });
+});
+
 router.post("/userData", async (req, res) => {
   try {
+    
+
     const { email, password } = req.body;
 
     if (!email || !password) {
       return res.json("error");
     }
-
     const query = `
-    SELECT email, password
+    SELECT email, password, userID
     from users 
     where email = :email`;
     const result = await sequelize.query(query, {
@@ -112,11 +135,18 @@ router.post("/userData", async (req, res) => {
     });
     if (!result[0]) res.json("incorrect");
     bcrypt.compare(password, result[0].password).then((match) => {
-      if (!match) {
-        res.json("incorrect");
-      } else {
-        res.json("correct");
-      }
+      if (!match)res.json("incorrect");
+      const userID = result[0].userID
+      const token = jwt.sign({userID: userID }, SECRET, {
+        expiresIn: '7d',
+      })
+      res.cookie('access_token', token, {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === 'production',  // Usar secure solo en producción
+        sameSite: 'lax',
+        maxAge: 7 * 24 * 60 * 60 * 1000
+      })
+      .json("authorized");
     });
   } catch (e) {
     console.error(e);
@@ -125,7 +155,11 @@ router.post("/userData", async (req, res) => {
 
 router.post("/userUpdate", async (req, res) => {
   try {
-    const { username, email, updatedAt, firstName, lastName, pic, userID } = req.body;
+    const { username, email, updatedAt, firstName, lastName, pic } = req.body;
+    const token = req.cookies.access_token;
+    if(!token) res.status(401).json({message: "Token missing"});
+    const data = jwt.verify(token, SECRET);
+    const userID = data.userID;
 
     if (!username || !email || !updatedAt || !firstName || !lastName || !pic || !userID) {
       return res.status(400).json("error");
@@ -151,8 +185,12 @@ router.post("/userUpdate", async (req, res) => {
 
 router.post("/userPassword", async (req, res) => {
   try {
-    const { password, userID } = req.body;
-
+    const { password } = req.body;
+    const token = req.cookies.access_token;
+    if(!token) res.status(401).json({message: "Token missing"});
+    const data = jwt.verify(token, SECRET);
+    const userID = data.userID;
+    
     if (!password || !userID) {
       return res.json("error");
     }
@@ -179,7 +217,11 @@ router.post("/userPassword", async (req, res) => {
 });
 router.post("/passUpdate", async (req, res) => {
   try {
-    const { userID, password } = req.body;
+    const { password } = req.body;
+    const token = req.cookies.access_token;
+    if(!token) res.status(401).json({message: "Token missing"});
+    const data = jwt.verify(token, SECRET);
+    const userID = data.userID;
 
     if (!userID || !password) {
       return res.status(400).json("error");

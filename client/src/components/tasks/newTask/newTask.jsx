@@ -1,13 +1,13 @@
-import React, { useRef, useState } from 'react'
+import { useRef, useState } from 'react'
 import axios from "axios"
 import toast, { Toaster } from 'react-hot-toast';
 import "./newTask.css"
 
 
-export default function newTask({reload, refresh}) {
+// eslint-disable-next-line react/prop-types
+export default function NewTask({refresh}) {
   let newTaskTab = useRef(null);
   let error = useRef(null);
-  const [userID, setUserID] = useState(1);
   const [title, setTitle] = useState('');
   const [priority, setPriority] = useState('');
   const [status, setStatus] = useState('');
@@ -19,8 +19,8 @@ export default function newTask({reload, refresh}) {
 
   const create = () =>{
     const toastId = toast.loading("Creating...");
+    // te quedaste editando aca el createcard para el token
     const data = {
-      userID: userID,
       title: title,
       description: desc,
       status: status, 
@@ -30,7 +30,9 @@ export default function newTask({reload, refresh}) {
       dueTime: hour,
     }
     try{
-      axios.post("http://localhost:3001/card/createCard",data).then((response)=>{
+      axios.post("http://localhost:3001/card/createCard",data,{
+        withCredentials: true
+      }).then((response)=>{
         if(response.data === "incorrect"){
           toast.error("Error creating Task. /n Please try again later.", {
             id: toastId,
@@ -40,7 +42,6 @@ export default function newTask({reload, refresh}) {
             id: toastId,
           })
           refresh(1);
-          console.log("reload, newTask");
           setTitle('');
           setPriority('');
           setStatus('');
@@ -79,7 +80,7 @@ export default function newTask({reload, refresh}) {
     <div className='newTask-container'>
     <div className="newTask-side-data">
         <span className='newTask-title'>Create</span>
-        <span htmlFor="side-subtitle" className="newTask-subtitle">Title: <input type="text" name="newTask-subtitle" className="newTask-subtitle-box" placeholder="- - -" value={title || ""} onChange={(e)=>{setTitle(e.target.value)}}/></span>
+        <span htmlFor="side-subtitle" className="newTask-subtitle">Title: <input type="text" name="newTask-subtitle" className="newTask-subtitle-box" autoComplete="off" defaultValue='' placeholder="- - -" onChange={(e)=>{setTitle(e.target.value)}}/></span>
         
         <label htmlFor="priority" className="newTask-priority">Priority:
             <select

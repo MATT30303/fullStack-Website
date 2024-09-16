@@ -1,6 +1,6 @@
-import React from 'react'
-import { useEffect, useState, useRef } from 'react';
-import { useNavigate, Link, Navigate } from 'react-router-dom';
+
+import { useState, useRef, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import axios from "axios";
 import logo from "../../../assets/images/logo-color.png"
 import "./sign.css"
@@ -19,13 +19,10 @@ export default function Sign() {
   let wrongRegPass = useRef(null);
   let wrongRegConfirm = useRef(null);
 
-
-
-  const [user, setUser] = useState([])
-  const [checkPass, setCheckPass] = useState('');
-  
+  const navigate = useNavigate()
   const [signEmail, setSignEmail] = useState("");
   const [signPassword, setSignPassword] = useState("");
+  const [authorized, setAuthorized] = useState('unauthorized');
   
   const [registerEmail, setRegisterEmail] = useState("");
   const [registerName, setRegisterName] = useState("");
@@ -35,7 +32,24 @@ export default function Sign() {
   const [registerConfirm, setRegisterConfirm] = useState("");
 
   const [count, setCount] = useState(1);
-  const [signChange, setSignChange] = useState (""); 
+  useEffect(()=>{
+    const fetchData = async () => {
+      try {
+        const response = await axios.post("http://localhost:3001/user/userCookie",{},{
+          withCredentials: true
+        });
+        setAuthorized(response.data);
+      } catch (error) {
+        console.error("No token:", error);
+      }
+    };
+    fetchData();
+  },[])
+  if(authorized == "authorized"){
+    console.log(authorized);
+    navigate("/tasks")
+  }
+
   const startedHandeler = () =>{
     if(count === 1){
       switcher.current.className="all-container-register";
@@ -51,7 +65,7 @@ export default function Sign() {
       setCount(1);
     }
   }
-  const navigate = useNavigate()
+  
   const handleNavigate =() =>{
     navigate("/tasks")
   }
@@ -59,10 +73,11 @@ export default function Sign() {
   const handleSignSubmit = (event) => {
     event.preventDefault();
     const data = {email: signEmail, password: signPassword};
-    axios.post("http://localhost:3001/user/userData", data).then((response)=>{
+    axios.post("http://localhost:3001/user/userData", data, { withCredentials: true }).then((response)=>{
       if(response.data === "incorrect"){
         handleSignError();
-      }else{
+      }
+      else if (response.data === "authorized"){
         handleNavigate();
       }
     })
@@ -154,7 +169,7 @@ export default function Sign() {
   return (
   <div>
     <div  className='text-container' ref={textContainer}>
-        <span className='bg-title'>Flan's To-Do List</span>
+        <span className='bg-title'>Flan&apos;s To-Do List</span>
         <span className='bg-description'>A place to set up and manage your daily tasks!</span>
         <span className='bg-dev'>&copy; Matt-dev</span>
     </div>
@@ -166,7 +181,7 @@ export default function Sign() {
 <div className='signin' ref={signIn}> 
       <div className='logo-container'><img className='logo-img' src={logo} alt="logo" /></div>
       <div className='sign-container' >
-        <span className="title">Sign in to Flan's</span>
+        <span className="title">Sign in to Flan&apos;s</span>
         <span className="sign-text" ref={wrongText}>Enter your account details below</span>
         <form action="" className="sign-account" onSubmit={handleSignSubmit} >
           <input className='email' type="email" autoComplete='off' required name="email" id="signEmail" placeholder='Email Adress' ref={checkSignEmail}  onChange={(e)=>{setSignEmail(e.target.value); handlesignFix()}} />
@@ -175,11 +190,10 @@ export default function Sign() {
           <button className='sign-button'>Sign in</button>
           
         </form>
-        <span className='forgot'>Forgot your password?</span>
       </div>
       <hr/>
       <div className='reg-container'>
-        <span className='reg-account'>Don't have an account?</span>
+        <span className='reg-account'>Don&apos;t have an account?</span>
         <button className='get-started' onClick={startedHandeler}>Get Started</button>
       </div> 
     </div>
@@ -188,7 +202,7 @@ export default function Sign() {
     
     <div className='register' ref={register}>
     <div className='register-container' >
-        <span className="register-title">Welcome to Flan's</span>
+        <span className="register-title">Welcome to Flan&apos;s</span>
         <span className="register-text" ref={wrongRegText} >Complete with your details below</span>
         <form action="" className="register-account" onSubmit={handleRegisterSubmit}>
           <input className='email' ref={wrongEmail} type="text" required  autoComplete='off' name="email" id="registerEmail" placeholder='Email Adress' onChange={(e)=>{setRegisterEmail(e.target.value); handleRegisterfix()}}/>

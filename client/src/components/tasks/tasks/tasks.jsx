@@ -1,15 +1,16 @@
 import { useState, useEffect, useRef } from "react";
-import React from "react";
 import axios from "axios";
+import { useNavigate } from 'react-router-dom';
 import "./tasks.css";
 import TodayTasks from "./today/today.jsx";
 import TomorrowTasks from "./tomorrow/tomorrow.jsx";
 import ThisWeekTasks from "./week/week.jsx";
 import PendingTasks from "./pending/pending.jsx";
 import SideTask from './sideTask/sideTask.jsx';
-import toast, { Toaster } from 'react-hot-toast';
+import { Toaster } from 'react-hot-toast';
 
-export default function tasks({reload, refresh}) {
+// eslint-disable-next-line react/prop-types
+export default function Tasks({reload}) {
   const [listOfCards, setListOfCards] = useState([]);
   const [user, setUser] = useState([]);
   const [todaysTasks, setTodaysTasks] = useState([]);
@@ -20,6 +21,7 @@ export default function tasks({reload, refresh}) {
   const [selectedTask, setSelectedTask] = useState(null);
   const [expandedTaskId, setExpandedTaskId] = useState(null);
   const [count, setCount] = useState(0);
+  const navigate = useNavigate()
 
   
  
@@ -32,29 +34,41 @@ export default function tasks({reload, refresh}) {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const data = { userID: 1 };
-        const response = await axios.post("http://localhost:3001/card/getcards", data);
+        const response = await axios.post("http://localhost:3001/card/getCards",{},{
+          withCredentials: true
+        });
         setListOfCards(response.data);
       } catch (error) {
         console.error("Error fetching cards:", error);
       }
     };
-    fetchData();
-    refresh(0);
-  }, [reload]);
-
-  useEffect(() => {
-    const fetchData = async () => {
+    const fetchCookie = async () => {
       try {
-        const data = { userID: 1 };
-        const response = await axios.post("http://localhost:3001/user/userCard", data);
+        const response = await axios.post("http://localhost:3001/user/userCookie",{},{
+          withCredentials: true
+        });
+        if(response.data === "unauthorized"){
+          navigate("/");
+        }
+      } catch (error) {
+        console.error("No token:", error);
+      }
+    };
+    const fetchUser = async () => {
+      try {
+        const response = await axios.post("http://localhost:3001/user/userCard",{},{
+          withCredentials: true
+        });
         setUser(response.data);
       } catch (error) {
         console.error("Error fetching user:", error);
       }
     };
+    fetchUser();
+    fetchCookie();
     fetchData();
-  }, []);
+  }, [reload]);
+
 
   useEffect(() => {
     if (listOfCards.length > 0) {
@@ -144,7 +158,6 @@ export default function tasks({reload, refresh}) {
   const handleDeleteTask = (taskID) => {
     setListOfCards(prevTasks => prevTasks.filter(listOfCards => listOfCards.taskID !== taskID));
   };
-
   return (
     <div id="tasks-tab" className='tasks-tab'>
       <div><Toaster

@@ -124,13 +124,14 @@
 
 .email, .password, .firstName, .lastName, .username{
     letter-spacing: .100rem;
+    font-size: 1rem;
     padding: 2rem 0 1rem 0;
     background-color: transparent;
     border: none;
     border-bottom: thin solid var(--gray-picker-dark);
     color: var(--white-offWhite);
     &::placeholder {
-        letter-spacing: normal;  
+        letter-spacing: normal;
       }
 }
 .wrongEmail, .wrongPassword{
@@ -152,12 +153,15 @@
     padding: 1rem 0 0 0;
     cursor: default;
 }
-
+::placeholder{
+    letter-spacing: normal;
+    color: var(--gray-picker-light);  
+}
 .password{
     letter-spacing: .5rem;
-    
  &::placeholder {
-    letter-spacing: normal;  
+    letter-spacing: normal;
+    color: var(--gray-picker-light);
   }
 }
 .password:focus{
@@ -165,7 +169,7 @@
  letter-spacing: .5rem;
 
  &::placeholder {
-    letter-spacing: normal;  
+    letter-spacing: normal;
   }
 }
 .email:focus, .password:focus, .firstName:focus, .lastName:focus, .username:focus{
@@ -230,7 +234,7 @@ hr{
 }
 .get-started:hover{
     background-color: var(--accent-purple-light);
-    box-shadow: 0 0 2rem 0 var(--accent-purple-light);
+    box-shadow: 0 0 1rem 0 var(--accent-purple-light);
     color: var(--black-matteBlack);
     transition: all .2s linear;
 }
