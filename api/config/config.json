@@ -1,24 +1,24 @@
 {
   "development": {
-    "username": "root",
-    "password": null,
-    "database": "nodejs",
-    "host": "127.0.0.1",
+    "username": "sql10731682",
+    "password": "qq7jcD6PZV",
+    "database": "sql10731682",
+    "host": "sql10.freemysqlhosting.net",
     "dialect": "mysql",
-    "port": "3307"
+    "port": "3306"
   },
   "test": {
-    "username": "root",
-    "password": null,
-    "database": "database_test",
-    "host": "127.0.0.1",
+    "username": "sql10731682",
+    "password": "qq7jcD6PZV",
+    "database": "sql10731682",
+    "host": "sql10.freemysqlhosting.net",
     "dialect": "mysql"
   },
   "production": {
-    "username": "root",
-    "password": null,
-    "database": "database_production",
-    "host": "127.0.0.1",
+    "username": "sql10731682",
+    "password": "qq7jcD6PZV",
+    "database": "sql10731682",
+    "host": "sql10.freemysqlhosting.net",
     "dialect": "mysql"
   }
 }

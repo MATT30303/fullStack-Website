@@ -98,9 +98,11 @@ router.post("/userCookie", async (req, res) => {
   try {
     const token = req.cookies.access_token;
     if (!token){ 
+    console.log("no auth");
      res.json("unauthorized");
     }
     else{
+      console.log("auth");
       res.json("authorized");    
     }
   } catch (e) {
