@@ -96,6 +96,7 @@ export default function User() {
   
  
   const save = () =>{
+    const toastId = toast.loading('Updating...');
     let currentDate = new Date().toJSON().slice(0, 10);
     const data = {
       username: userUsername,
@@ -105,27 +106,32 @@ export default function User() {
       lastName: userlastName,
       pic: profile,
     }
-    const toastId = toast.loading('Updating...');
-    try{
-      axios.post("https://flanstdl.onrender.com/user/userUpdate",data, {
-        withCredentials: true
-      }).then((response)=>{
-        if(response.data === "incorrect" || response.data === "error"){
-          toast.error("Something went wrong. Try again later",{
-            id: toastId,
-          })
-        }else{
-          toast.success('Updated successfully', {
-            id: toastId,
-          });
-        }
-      })
-    }catch (error) {
-      toast.error("Something went wrong. Try again later",{
+    if(userUsername == "" || userEmail == "" || currentDate == "" || userfirstName == "" || userlastName== "" || profile == "" || userEmail == "@"){
+      toast.error("All fields must be completed",{
         id: toastId,
       })
     }
-
+    else{
+      try{
+        axios.post("https://flanstdl.onrender.com/user/userUpdate",data, {
+          withCredentials: true
+        }).then((response)=>{
+          if(response.data === "incorrect" || response.data === "error"){
+            toast.error("Something went wrong. Try again later",{
+              id: toastId,
+            })
+          }else{
+            toast.success('Updated successfully', {
+              id: toastId,
+            });
+          }
+        })
+      }catch (error) {
+        toast.error("Something went wrong. Try again later",{
+          id: toastId,
+        })
+      }
+    }
   }
   
   
@@ -191,22 +197,22 @@ export default function User() {
 
             <div className="user-username">
               <span className='username-span'>USER NAME</span>
-              <input type="text" className='username-input' defaultValue={user.username || ""} onChange={(e)=>{setUserUsername(e.target.value)}}/>
+              <input type="text" className='username-input' defaultValue={user.username || ""} required onChange={(e)=>{setUserUsername(e.target.value)}}/>
             </div>
             
             <div className="user-email">
             <span className='email-span'>E-MAIL</span>
-            <input type="email" className='email-input' defaultValue={user.email || ""} onChange={(e)=>{setUserEmail(e.target.value)}}/>
+            <input type="email" className='email-input' defaultValue={user.email || ""} required onChange={(e)=>{setUserEmail(e.target.value)}}/>
             </div>
             
             <div className="user-firstName">
             <span className='firstName-span'>FIRST NAME</span>
-            <input type="text" className='firstName-input'defaultValue={user.firstName || ""} onChange={(e)=>{setUserfirstName(e.target.value)}}/>
+            <input type="text" className='firstName-input'defaultValue={user.firstName || ""} required onChange={(e)=>{setUserfirstName(e.target.value)}}/>
             </div>
             
             <div className="user-lastName">
             <span className='lastName-span'>LAST NAME</span>
-            <input type="text" className='lastName-input'defaultValue={user.lastName || ""} onChange={(e)=>{setUserlastName(e.target.value)}}/>
+            <input type="text" className='lastName-input'defaultValue={user.lastName || ""} required onChange={(e)=>{setUserlastName(e.target.value)}}/>
             </div>
 
             

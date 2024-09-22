@@ -74,13 +74,14 @@ a{
     font-size: 1.5rem;
     cursor: default;
 }
+
 .newTask-title{
     justify-content: center;
     padding: 2rem 0 0 0;
     font-size: 3rem;
 }
-.newTask-subtitle-box, .select-newTask-priority, .select-newTask-status, .newTask-date-box, .newTask-hour-box, .newTask-desc-area, .select-newTask-category{
-    background-color: var(--black-pickerLight);
+.newTask-subtitle-box, .select-newTask-priority, .select-newTask-status, .newTask-date-box, .newTask-hour-box, .newTask-desc-area, .select-newTask-category, input:is(:-webkit-autofill, :autofill), .newTask-subtitle-box:autofill, input:autofill, :autofill {
+    background-color: var(--black-pickerLight) !important;
     color: var(--white-offWhite);
     width: 9vw;
     height: 4vh;
