@@ -16,43 +16,49 @@ export default function NewTask({refresh}) {
   const [hour, setHour] = useState('');
   const [desc, setDesc] = useState('');
 
-
   const create = () =>{
     const toastId = toast.loading("Creating...");
-    // te quedaste editando aca el createcard para el token
-    const data = {
-      title: title,
-      description: desc,
-      status: status, 
-      priority: priority,
-      category: category,
-      dueDate: date,
-      dueTime: hour,
+    if(title == "" || desc == "" ||  status == "" || priority == "" ||  category == "" || date == "" || hour == ""){
+      toast.error("All fields must be completed", {
+        id: toastId,
+      });
     }
-    try{
-      axios.post("http://localhost:3001/card/createCard",data,{
-        withCredentials: true
-      }).then((response)=>{
-        if(response.data === "incorrect"){
-          toast.error("Error creating Task. /n Please try again later.", {
-            id: toastId,
-          })
-        }else{
-          toast.success("Task created", {
-            id: toastId,
-          })
-          refresh(1);
-          setTitle('');
-          setPriority('');
-          setStatus('');
-          setCategory('');
-          setDate('');
-          setHour('');
-          setDesc('');
-        }
-      })
-    }catch (error) {
-      console.error("Error creating:", error);
+    else{
+      const data = {
+        title: title,
+        description: desc,
+        status: status, 
+        priority: priority,
+        category: category,
+        dueDate: date,
+        dueTime: hour,
+      }
+      try{
+        axios.post("https://flanstdl.onrender.com/card/createCard",data,{
+          withCredentials: true
+        }).then((response)=>{
+          if(response.data === "incorrect"){
+            toast.error("Error creating Task. /n Please try again later.", {
+              id: toastId,
+            })
+          }else{
+            toast.success("Task created", {
+              id: toastId,
+            })
+            refresh(1);
+            setTitle('');
+            setPriority('');
+            setStatus('');
+            setCategory('');
+            setDate('');
+            setHour('');
+            setDesc('');
+          }
+        })
+        window.scrollTo(0, 0);
+      }catch (error) {
+        console.error("Error creating:", error);
+      }
     }
   }
 
@@ -133,7 +139,7 @@ export default function NewTask({refresh}) {
         </div>
           <div className="newTask-buttons">
             <a className="newTask-button" href="#">Back</a>
-            <a className="newTask-button" href="#" onClick={create}>Create</a>
+            <a className="newTask-button" onClick={create}>Create</a>
           </div>
     </div>
    </div>

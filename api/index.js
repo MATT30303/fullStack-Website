@@ -4,6 +4,7 @@ const app = express();
 import cookieParser from "cookie-parser";
 import dotenv from "dotenv";
 dotenv.config();
+const port = 3001;
 
 app.use(express.json());
 app.use(cookieParser());
@@ -26,7 +27,7 @@ app.use("/getUser", getUserRouter);
 
 import db from "./models/index.js";
 db.sequelize.sync().then(() => {
-  app.listen(3001, () => {
+  app.listen(port, () => {
     console.log("server working");
   });
 });

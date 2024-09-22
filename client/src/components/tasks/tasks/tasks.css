@@ -272,7 +272,7 @@ option{
     background-color: var(--black-picker);
     border: none;
     border-radius: 1rem;
-    padding: 1rem 0 0 0;
+    padding: 1rem .5rem 0 .5rem;
 }
 .tasks{
     width: 100%;
@@ -367,6 +367,7 @@ option{
 }
 .checker{
     z-index: 2;
+    padding: 0 .5rem 0 0;
 }
 .tasks-checkbox{
     width: 1rem;
@@ -403,7 +404,7 @@ option{
     width: 1rem;
     cursor: pointer;
     background-color: transparent;
-    padding: 0 .3rem 0 0;
+    padding: 0 .8rem 0 0;
     animation: .2s ease-out forwards toDefault;
 }
 .tasks-arrow:hover{

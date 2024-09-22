@@ -1,6 +1,5 @@
 import { useState, useEffect, useRef } from "react";
 import axios from "axios";
-import { useNavigate } from 'react-router-dom';
 import "./tasks.css";
 import TodayTasks from "./today/today.jsx";
 import TomorrowTasks from "./tomorrow/tomorrow.jsx";
@@ -10,7 +9,7 @@ import SideTask from './sideTask/sideTask.jsx';
 import { Toaster } from 'react-hot-toast';
 
 // eslint-disable-next-line react/prop-types
-export default function Tasks({reload}) {
+export default function Tasks({reload, refresh}) {
   const [listOfCards, setListOfCards] = useState([]);
   const [user, setUser] = useState([]);
   const [todaysTasks, setTodaysTasks] = useState([]);
@@ -21,7 +20,6 @@ export default function Tasks({reload}) {
   const [selectedTask, setSelectedTask] = useState(null);
   const [expandedTaskId, setExpandedTaskId] = useState(null);
   const [count, setCount] = useState(0);
-  const navigate = useNavigate()
 
   
  
@@ -34,7 +32,7 @@ export default function Tasks({reload}) {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.post("http://localhost:3001/card/getCards",{},{
+        const response = await axios.post("https://flanstdl.onrender.com/card/getCards",{},{
           withCredentials: true
         });
         setListOfCards(response.data);
@@ -44,11 +42,11 @@ export default function Tasks({reload}) {
     };
     const fetchCookie = async () => {
       try {
-        const response = await axios.post("http://localhost:3001/user/userCookie",{},{
+        const response = await axios.post("https://flanstdl.onrender.com/user/userCookie",{},{
           withCredentials: true
         });
         if(response.data === "unauthorized"){
-          navigate("/");
+          window.location.href = "/";
         }
       } catch (error) {
         console.error("No token:", error);
@@ -56,7 +54,7 @@ export default function Tasks({reload}) {
     };
     const fetchUser = async () => {
       try {
-        const response = await axios.post("http://localhost:3001/user/userCard",{},{
+        const response = await axios.post("https://flanstdl.onrender.com/user/userCard",{},{
           withCredentials: true
         });
         setUser(response.data);
@@ -64,9 +62,14 @@ export default function Tasks({reload}) {
         console.error("Error fetching user:", error);
       }
     };
-    fetchUser();
-    fetchCookie();
-    fetchData();
+    if(reload==0){
+      fetchUser();
+      fetchCookie();
+      fetchData();
+    }
+    else{
+      refresh(0);
+    }
   }, [reload]);
 
 
@@ -137,7 +140,7 @@ export default function Tasks({reload}) {
       status: value.status
     }
     try{
-      axios.post("http://localhost:3001/card/statusCard",data).then((response)=>{
+      axios.post("https://flanstdl.onrender.com/card/statusCard",data).then((response)=>{
         if(response.data === "incorrect"){
           alert("Something went wrong. Please try again later")
         }
@@ -150,13 +153,14 @@ export default function Tasks({reload}) {
   }
   const handleTaskBack = () =>{
     sideDefault.current.className="side-container";
-
+    refresh(1);
   }
   const handleExpantion = (taskID) =>{
     setExpandedTaskId((prevTaskId) => (prevTaskId === taskID ? null : taskID));
   }
   const handleDeleteTask = (taskID) => {
     setListOfCards(prevTasks => prevTasks.filter(listOfCards => listOfCards.taskID !== taskID));
+    handleTasks();
   };
   return (
     <div id="tasks-tab" className='tasks-tab'>

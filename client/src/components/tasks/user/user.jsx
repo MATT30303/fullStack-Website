@@ -54,7 +54,7 @@ export default function User() {
   useEffect(()=>{
     const fetchData = async () => {
       try {
-        const response = await axios.post("http://localhost:3001/user/userCard",{},{
+        const response = await axios.post("https://flanstdl.onrender.com/user/userCard",{},{
           withCredentials: true
         });
         setUser(response.data[0]);
@@ -107,7 +107,7 @@ export default function User() {
     }
     const toastId = toast.loading('Updating...');
     try{
-      axios.post("http://localhost:3001/user/userUpdate",data, {
+      axios.post("https://flanstdl.onrender.com/user/userUpdate",data, {
         withCredentials: true
       }).then((response)=>{
         if(response.data === "incorrect" || response.data === "error"){

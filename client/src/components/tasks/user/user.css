@@ -35,6 +35,8 @@ html{
     display: flex;
     justify-content: center;
     align-items: center;
+    overflow-x: hidden;
+    overflow-y: hidden;
 }
 .user-container{
     background-color: var(--black-pickerLight);

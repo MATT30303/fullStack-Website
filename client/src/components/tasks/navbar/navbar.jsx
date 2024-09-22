@@ -10,7 +10,7 @@ export default function Navbar() {
   let box = useRef(null)
   const handleLogout = async () => {
     try {
-      await axios.post("http://localhost:3001/user/logout",{}, {
+      await axios.post("https://flanstdl.onrender.com/user/logout",{}, {
         withCredentials: true,
       });
       window.location.href = "/";

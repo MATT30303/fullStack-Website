@@ -41,7 +41,7 @@ html{
     position: fixed;
     left: 0;
     z-index: 5;
-    width: 5rem;
+    width: 8rem;
     height: 100%;
 }
 .icons-container{
@@ -58,6 +58,7 @@ html{
     top: 1vw;
     left: 1vw;
     width: 5rem;
+    padding: 0 .5rem 0 0;
 }
 .icon{
     width: 2.5rem;

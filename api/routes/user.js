@@ -1,7 +1,7 @@
 import express from "express";
 const router = express.Router();
 import db from "../models/index.js";
-import bcrypt, { hash } from "bcrypt";
+import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import { SECRET } from "./config.js";
 
@@ -98,11 +98,9 @@ router.post("/userCookie", async (req, res) => {
   try {
     const token = req.cookies.access_token;
     if (!token){ 
-    console.log("no auth");
      res.json("unauthorized");
     }
     else{
-      console.log("auth");
       res.json("authorized");    
     }
   } catch (e) {

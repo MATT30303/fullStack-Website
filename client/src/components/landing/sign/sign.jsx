@@ -35,7 +35,7 @@ export default function Sign() {
   useEffect(()=>{
     const fetchData = async () => {
       try {
-        const response = await axios.post("http://localhost:3001/user/userCookie",{},{
+        const response = await axios.post("https://flanstdl.onrender.com/user/userCookie",{},{
           withCredentials: true
         });
         setAuthorized(response.data);
@@ -46,8 +46,7 @@ export default function Sign() {
     fetchData();
   },[])
   if(authorized == "authorized"){
-    console.log(authorized);
-    navigate("/tasks")
+    navigate("/Tasks");
   }
 
   const startedHandeler = () =>{
@@ -73,7 +72,7 @@ export default function Sign() {
   const handleSignSubmit = (event) => {
     event.preventDefault();
     const data = {email: signEmail, password: signPassword};
-    axios.post("http://localhost:3001/user/userData", data, { withCredentials: true }).then((response)=>{
+    axios.post("https://flanstdl.onrender.com/user/userData", data, { withCredentials: true }).then((response)=>{
       if(response.data === "incorrect"){
         handleSignError();
       }
@@ -103,8 +102,7 @@ export default function Sign() {
 
     if(registerPassword === registerConfirm){
       const data = {email: registerEmail};
-      axios.post("http://localhost:3001/User/check", data).then((response)=>{
-        console.log(response.data);
+      axios.post("https://flanstdl.onrender.com/User/check", data).then((response)=>{
         if(response.data === "incorrect"){
           handleEmailError();
         }else if(response.data === "empty"){
@@ -119,18 +117,22 @@ export default function Sign() {
     
   }
   const handleInsert = () =>{
+    let currentDate = new Date().toJSON().slice(0, 10);
     const data = {
       username: registerUsername,
       password: registerPassword,
       email: registerEmail,
       firstName: registerName,
-      lastName: registerLastName
+      lastName: registerLastName,
+      createdAt: currentDate,
     };
-    axios.post("http://localhost:3001/user", data).then((response)=>{
+    axios.post("https://flanstdl.onrender.com/user", data,{
+      withCredentials: true
+    }).then((response)=>{
       if(response.data === "incorrect"){
         handleSomethingWrong();
       }else{
-        handleNavigate();
+        window.location.reload();
       }
     })
   }

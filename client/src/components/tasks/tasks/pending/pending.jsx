@@ -1,4 +1,3 @@
-import React from "react";
 import { useState } from "react";
 import arrowRight from "../../../../assets/images/transparent-arrow.png";
 
@@ -11,12 +10,6 @@ export default function PendingTasks({ pending, overWeektasks, checkHandler, han
       [taskID]: isChecked,
     }));
   };
-
-
-
-  //className={`tasks ${checkedTasks[value.taskID] ? "completed-task" : ""}`}
-  //onClick={(e) => checkHandler(e, value.taskID)}
-
   return (
     <div className='tasks-list'>
       {pending.map((value) => (

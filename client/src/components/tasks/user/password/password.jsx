@@ -65,7 +65,6 @@ export default function Password() {
     }
 
     const updatePass = (toastId)=>{
-      console.log("entro");
       const data = {
         password: userNew
       }

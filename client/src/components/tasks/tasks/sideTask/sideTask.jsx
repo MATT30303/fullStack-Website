@@ -1,14 +1,15 @@
-import React, { useEffect, useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import axios from "axios";
 import toast, { Toaster } from 'react-hot-toast';
 import "./sideTask.css"
-export default function sideTask({selectedTask, setSelectedTask , handleTaskBack, count, setCount, handleDeleteTask}) {
-  let sideError = useRef(null);
+import PropTypes from 'prop-types';
+// eslint-disable-next-line react/prop-types
+export default function SideTask({selectedTask, setSelectedTask , handleTaskBack, count, setCount, handleDeleteTask}) {
+
   let sideTask = useRef(null);
   
 
   const[sidetaskID, setTaskID] = useState('');
-  const[sideuserID, setUserID] = useState('');
   const [sidetitle, setTitle] = useState('');
   const [sidedescription, setdescription] = useState('');
   const[sidestatus, setstatus] = useState('');
@@ -16,27 +17,24 @@ export default function sideTask({selectedTask, setSelectedTask , handleTaskBack
   const [sidecategory, setcategory] = useState('');
   const[sidedate, setdate] = useState('');
   const[sidehour, sethour] = useState('');
-  const [sidecreatedAt, setcreatedAt] = useState('');
   const [sideupdatedAt, setupdatedAT] = useState('');
   
 
   const handleBack = () =>{
     sideTask.current.className="side-container-task-none";
-    setCount(0)
+    setCount(0);
   }
   useEffect(()=>{
     if(count == 1){
       sideTask.current.className="side-container-task";
 
       let currentDate = new Date().toJSON().slice(0, 10);
-      setUserID(selectedTask.userID);
       setTaskID(selectedTask.taskID);
       setTitle(selectedTask.title);
       setdescription(selectedTask.description);
       setstatus(selectedTask.status);
       setpriority(selectedTask.priority);
       setcategory(selectedTask.category);
-      setcreatedAt(selectedTask.createdAt);
       setdate(selectedTask.dueDate);
       sethour(selectedTask.dueTime);
       setupdatedAT(currentDate);
@@ -58,7 +56,7 @@ export default function sideTask({selectedTask, setSelectedTask , handleTaskBack
     
     const toastId = toast.loading('Updating...');
     try{
-      axios.post("http://localhost:3001/card/updateCard",data).then((response)=>{
+      axios.post("https://flanstdl.onrender.com/card/updateCard",data).then((response)=>{
         if(response.data === "incorrect"){
           toast.error("Something went wrong. Try again later",{
             id: toastId,
@@ -86,7 +84,7 @@ export default function sideTask({selectedTask, setSelectedTask , handleTaskBack
     }
     if(confirm("You are about to delete this task completly. \n Are you sure?")){
       try{ 
-        axios.post("http://localhost:3001/card/deleteCard",data).then((response)=>{
+        axios.post("https://flanstdl.onrender.com/card/deleteCard",data).then((response)=>{
           if(response.data === "incorrect"){
             toast.error("Something went wrong. Try again later",{
               id: toastId,
@@ -104,6 +102,8 @@ export default function sideTask({selectedTask, setSelectedTask , handleTaskBack
       }catch (error) {
         console.error("Error updating:", error);
       }
+    }else{
+      toast.dismiss({od: toastId});
     }
   }
 
@@ -128,7 +128,7 @@ export default function sideTask({selectedTask, setSelectedTask , handleTaskBack
               },
         }}}
       /></div>
-        <button className="side-back" onClick={(e)=>{handleBack(); handleTaskBack()}}>X</button>
+        <button className="side-back" onClick={()=>{handleBack(); handleTaskBack()}}>X</button>
         <div className="side-data">
         <span className='side-title'>Task</span>
         
@@ -214,3 +214,15 @@ export default function sideTask({selectedTask, setSelectedTask , handleTaskBack
 
     )
 }
+SideTask.propTypes = {
+  selectedTask: PropTypes.shape({
+    taskID: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,  // Si puede ser string o número
+    title: PropTypes.string.isRequired,
+    description: PropTypes.string.isRequired,
+    status: PropTypes.string.isRequired,
+    priority: PropTypes.string.isRequired,
+    category: PropTypes.string.isRequired,
+    dueDate: PropTypes.string.isRequired,  // Asume que es una fecha en formato string
+    dueTime: PropTypes.string.isRequired,  // Asume que es un string
+  }).isRequired,
+};

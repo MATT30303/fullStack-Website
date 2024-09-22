@@ -6,8 +6,8 @@ export default function App (){
     <div>
       <BrowserRouter>
         <Routes>
-          <Route index path="/" element= {<Landing></Landing>}></Route>
-          <Route path="tasks" element= {<TasksPage></TasksPage>}></Route>
+          <Route index element= {<Landing></Landing>}></Route>
+          <Route path="Tasks" element= {<TasksPage></TasksPage>}></Route>
         </Routes>
       </BrowserRouter>
     </div>
