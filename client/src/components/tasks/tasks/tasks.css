@@ -382,7 +382,7 @@ option{
 .card-title{
     position: absolute;
     left: 0;
-    width: 40%;
+    width: 80%;
     color: var(--white-offWhite);
     display: flex;
     align-items: center;

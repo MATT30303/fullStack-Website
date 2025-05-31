@@ -80,10 +80,22 @@ a{
     padding: 2rem 0 0 0;
     font-size: 3rem;
 }
-.newTask-subtitle-box, .select-newTask-priority, .select-newTask-status, .newTask-date-box, .newTask-hour-box, .newTask-desc-area, .select-newTask-category, input:is(:-webkit-autofill, :autofill), .newTask-subtitle-box:autofill, input:autofill, :autofill {
+.newTask-subtitle-box, .select-newTask-priority, .select-newTask-status, .newTask-date-box, .newTask-hour-box, .newTask-desc-area, .select-newTask-category {
     background-color: var(--black-pickerLight) !important;
     color: var(--white-offWhite);
     width: 9vw;
+    height: 4vh;
+    padding: 0 1rem;
+    font-size: 1rem;
+    border: .125rem solid var(--black-pickerLight);
+    border-bottom: .125rem solid var(--accent-pink);
+    border-radius: .5rem;
+    appearance: none;
+    cursor: pointer;
+}
+input:-internal-autofill-selected{
+    background-color: #2c2c2c;
+    color: var(--white-offWhite);
     height: 4vh;
     padding: 0 1rem;
     font-size: 1rem;

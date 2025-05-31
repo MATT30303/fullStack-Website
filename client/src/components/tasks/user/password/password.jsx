@@ -44,10 +44,10 @@ export default function Password() {
             password: userOld,
           }
           try{
-            axios.post("http://localhost:3001/user/userPassword",data,{
+            axios.post("https://flanstdl.onrender.com/user/userPassword",data,{
               withCredentials: true
             }).then((response)=>{
-              if(response.data === "incorrect"){
+              if(response.data === "Password is incorrect"){
                 toast.error("Old password is incorrect",{
                   id: toastId,
                 })
@@ -69,13 +69,19 @@ export default function Password() {
         password: userNew
       }
       try{
-        axios.post("http://localhost:3001/user/passUpdate",data,{
+        axios.post("https://flanstdl.onrender.com/user/passUpdate",data,{
           withCredentials: true
         }).then((response)=>{
           if(response.data === "incorrect"){
             toast.error("Something went Wrong. Try again later.",{
               id: toastId,
             })
+          }else if(response.data === "Password must be at least 6 characters long and contain a number."){
+            toast.error(response.data,{
+              id: toastId,
+            })
+            newBox.current.className="pass-new-box-error";
+            confBox.current.className="pass-confirm-box-error";
           }else{
             toast.success('Updated successfully', {
               id: toastId,

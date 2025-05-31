@@ -1,4 +1,4 @@
-
+import toast, { Toaster } from 'react-hot-toast';
 import { useState, useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from "axios";
@@ -70,13 +70,20 @@ export default function Sign() {
   }
 
   const handleSignSubmit = (event) => {
+    const toastId = toast.loading('Almost there, just a moment...');
     event.preventDefault();
     const data = {email: signEmail, password: signPassword};
     axios.post("https://flanstdl.onrender.com/user/userData", data, { withCredentials: true }).then((response)=>{
       if(response.data === "incorrect"){
         handleSignError();
+        toast.error("E-mail or password is incorrect",{
+          id: toastId,
+        })
       }
       else if (response.data === "authorized"){
+        toast.success("Access granted. Welcome!",{
+          id: toastId,
+        })
         handleNavigate();
       }
     })
@@ -85,8 +92,6 @@ export default function Sign() {
   const handleSignError=()=>{
     checkSignEmail.current.className="wrongEmail";
     checkSignPassword.current.className="wrongPassword";
-    wrongText.current.className="Wrong-sign-text";
-    wrongText.current.innerHTML="Incorrect email or password. <br> Please try again.";
   }
   const handlesignFix = () =>{
     checkSignEmail.current.className="email";
@@ -98,25 +103,36 @@ export default function Sign() {
 
   const handleRegisterSubmit = (event) => {
     event.preventDefault();
+    const toastId = toast.loading('Almost there, just a moment...');
 
-
-    if(registerPassword === registerConfirm){
+    if(registerPassword !== registerConfirm){
+      handlePassError();
+      toast.error("Passwords do not match",{
+        id: toastId,
+      })
+    }else{
       const data = {email: registerEmail};
       axios.post("https://flanstdl.onrender.com/User/check", data).then((response)=>{
         if(response.data === "incorrect"){
           handleEmailError();
+          toast.error("There already is an account linked to the E-mail provided",{
+            id: toastId,
+          })
         }else if(response.data === "empty"){
           handleEmailEmpty();
+          toast.error("The E-mail field is empty",{
+            id: toastId,
+          })
         }
         else{
-          handleInsert();
+          handleInsert(toastId);
         }
       })
-    }else handlePassError();
+    }
     
     
   }
-  const handleInsert = () =>{
+  const handleInsert = (toastId) =>{
     let currentDate = new Date().toJSON().slice(0, 10);
     const data = {
       username: registerUsername,
@@ -130,40 +146,39 @@ export default function Sign() {
       withCredentials: true
     }).then((response)=>{
       if(response.data === "incorrect"){
-        handleSomethingWrong();
+        toast.error("Something went wrong. Try again later.",{
+          id: toastId,
+        })
+      }else if(response.data === "Password must be at least 6 characters long and contain a number."){
+        toast.error("Password must contain at least 6 characters and a number.",{
+          id: toastId,
+        })
       }else{
-        window.location.reload();
+        startedHandeler();
+        toast.success("Account created!!",{
+          id: toastId,
+        })
       }
     })
   }
-  const handleSomethingWrong =() =>{
-    wrongRegText.current.innerHTML="something went wrong. <br>Try again later."
-    wrongRegText.current.className="wrong-reg-text";
-  }
   const handleEmailError =() =>{
     wrongEmail.current.className="wrongEmail";
-    wrongRegText.current.innerHTML="There is an account with that email"
     wrongRegText.current.className="wrong-reg-text";
   }
   const handleEmailEmpty =() =>{
     wrongEmail.current.className="wrongEmail";
-    wrongRegText.current.innerHTML="Email is empty"
     wrongRegText.current.className="wrong-reg-text";
   }
   const handlePassError =() =>{
     wrongRegPass.current.className="wrongPassword";
     wrongRegConfirm.current.className="wrongPassword"
     wrongRegText.current.className="wrong-reg-text";
-    wrongRegText.current.innerHTML="Passwords are not the same";
   }
-  
-  
   const handleRegisterfix =() =>{
     wrongRegPass.current.className="password";
     wrongRegConfirm.current.className="password";
     wrongEmail.current.className="email";
     wrongRegText.current.className="register-text";
-    wrongRegText.current.innerHTML="Complete with your details below";
   }
 
 
@@ -178,7 +193,25 @@ export default function Sign() {
 
   <div className='all-container' ref={switcher}>
     
-      
+      <Toaster
+          toastOptions={{
+            className: '',
+            style: {
+              border: '1px solid #FFB6C1',
+              padding: '16px',
+              color: '#FAF9F6',
+              background: "#2c2c2c",
+            },
+            error: {
+                duration: 4000,
+              style: {
+                border: '1px solid #F33A6A',
+                padding: '16px',
+                color: '#FAF9F6',
+                background: "#2c2c2c",
+              },
+        }}}
+      />
     
 <div className='signin' ref={signIn}> 
       <div className='logo-container'><img className='logo-img' src={logo} alt="logo" /></div>
