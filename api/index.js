@@ -41,7 +41,7 @@ import initializeDatabase from './utils/initDB.js';
     await initializeDatabase();
 
     app.listen(port, () => {
-      console.log(`Server running en el puerto ${port}`);
+      console.log(`Server prendido en port ${port}`);
     });
   } catch (err) {
     console.error(' Error al iniciar el servidor o la base de datos:', err);
