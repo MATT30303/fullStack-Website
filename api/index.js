@@ -28,9 +28,22 @@ import getUserRouter from './routes/getUser.js';
 app.use('/getUser', getUserRouter);
 
 import db from './models/index.js';
-db.sequelize.sync({ force: true }).then(() => {
-  console.log('DB synced force');
-  app.listen(port, () => {
-    console.log('server running');
-  });
-});
+import initializeDatabase from './utils/initDB.js';
+
+(async () => {
+  try {
+    await db.sequelize.authenticate();
+    console.log(' Conectado a la base de datos');
+
+    await db.sequelize.sync({ alter: true });
+    console.log(' Tablas sincronizadas');
+
+    await initializeDatabase();
+
+    app.listen(port, () => {
+      console.log(`Server running en el puerto ${port}`);
+    });
+  } catch (err) {
+    console.error(' Error al iniciar el servidor o la base de datos:', err);
+  }
+})();
